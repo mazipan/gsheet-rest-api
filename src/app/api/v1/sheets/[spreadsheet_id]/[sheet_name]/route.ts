@@ -1,9 +1,15 @@
 import { getDataBySheetName } from '@/utils/sheets';
+import { NextRequest } from 'next/server';
 
 export async function GET(
-  _request: Request,
+  request: NextRequest,
   { params }: { params: { spreadsheet_id: string; sheet_name: string } }
 ) {
+  const searchParams = request.nextUrl.searchParams
+  const offset = searchParams.get('offset')
+  const perPage = searchParams.get('per_page')
+  const columnCount = searchParams.get('column_count')
+
   const { spreadsheet_id, sheet_name } = await params;
 
   if (!spreadsheet_id || !sheet_name) {
@@ -17,7 +23,11 @@ export async function GET(
     })
   }
 
-  const res = await getDataBySheetName(spreadsheet_id, sheet_name);
+  const res = await getDataBySheetName(spreadsheet_id, sheet_name, {
+    offset: offset ? parseInt(offset, 10) : 2,
+    perPage: perPage ? parseInt(perPage, 10) : 100,
+    columnCount: columnCount ? parseInt(columnCount, 10) : 10,
+  });
 
   if (res) {
     return Response.json(res);
