@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { google } from 'googleapis';
+import { google, type sheets_v4 } from 'googleapis';
 import { detectValues, numberToLetter } from './utils';
 
 // :oad the environment variable with our keys
@@ -94,7 +94,7 @@ export type DataBySheetIdOptions = {
 export type SheetColumn = {
   title: string;
   cell: string;
-}
+};
 
 export type SheetPagination = {
   perPage: number;
@@ -103,7 +103,7 @@ export type SheetPagination = {
   nextOffset: number;
   totalItems: number;
   haveNext: boolean;
-}
+};
 
 export type GetDataBySheetNameResponse = {
   columns: SheetColumn[];
@@ -145,7 +145,7 @@ export async function getDataBySheetName(
       headerRow.forEach((columnName, columnIndex) => {
         columns.push({
           title: columnName,
-          cell: `${sheetName}!${numberToLetter(columnIndex + 1)}`
+          cell: `${sheetName}!${numberToLetter(columnIndex + 1)}`,
         });
       });
 
@@ -186,212 +186,52 @@ export async function getDataBySheetName(
   }
 }
 
-// // --------------
-// // GET /gsheet/:spreadsheetId/:sheetName/:rowNumber
-// // --------------
-// router.get(
-//   '/:spreadsheetId([a-zA-Z0-9-_]+)/:sheetName/:rowNumber',
-//   async (req, res, next) => {
-//     try {
-//       // Validations
-//       if (!req.params.spreadsheetId)
-//         return utils.throwError('Missing spreadsheetId', 400);
-//       if (!req.params.sheetName)
-//         return utils.throwError('Missing sheetName', 400);
-//       const params = utils.getParams(req.params, [
-//         'spreadsheetId',
-//         'sheetName',
-//         'rowNumber',
-//       ]);
-//       const { rowNumber } = req.params;
+export async function removeRows(spreadsheetId: string, sheetName: string, rows: string[]) {
+  // Get sheetId
+  const sheetRes = await sheets.spreadsheets.get({
+    spreadsheetId,
+  });
 
-//       const { spreadsheetId, sheetName } = params;
+  if (!sheetRes || !sheetRes.data || !sheetRes.data.sheets) return null;
 
-//       const maxColumn = req.query.columnCount
-//         ? utils.numberToLetter(Number(req.query.columnCount))
-//         : 'EE';
+  const sheetInfo = sheetRes.data.sheets.find(
+    (d) => d?.properties?.title === sheetName
+  );
 
-//       const headerRange = `${sheetName}!A1:${maxColumn}1`;
-//       const dataRange = `${sheetName}!A${rowNumber}:${maxColumn}${rowNumber}`;
+  if (!sheetInfo) return null;
 
-//       const sheetRes = await sheets.spreadsheets.values.batchGet({
-//         spreadsheetId,
-//         ranges: [headerRange, dataRange],
-//       });
-//       const headerRow = sheetRes.data.valueRanges[0].values[0];
-//       const rows = sheetRes.data.valueRanges[1].values;
-//       const row = { rowNumber: Number(rowNumber) };
-//       headerRow.forEach((columnName, columnIndex) => {
-//         row[columnName] = utils.detectValues(rows[0][columnIndex]);
-//       });
+  const sheetId = sheetInfo.properties?.sheetId;
 
-//       return res.send(row);
-//     } catch (e) {
-//       if (e.response) {
-//         const error = new Error(e.response.data.error.message);
-//         error.status = e.response.data.error.code;
-//         return next(error);
-//       }
-//       return next(e);
-//     }
-//   }
-// );
+  // Build requests (we should delete from the bottom to top)
+  const rowNumbers = rows.map((d) => Number(d));
+  rowNumbers.sort((a, b) => b - a);
 
-// // --------------
-// // PUT /gsheet/:spreadsheetId/:sheetName
-// // --------------
-// router.put('/:spreadsheetId/:sheetName', async (req, res, next) => {
-//   try {
-//     // Validations
-//     if (!req.params.spreadsheetId)
-//       return utils.throwError('Missing spreadsheetId', 400);
-//     if (!req.params.sheetName)
-//       return utils.throwError('Missing sheetName', 400);
+  const requests: sheets_v4.Schema$Request[] = [];
+  rowNumbers.forEach((endIndex: number) => {
+    const deleteDimension = {
+      range: {
+        sheetId,
+        dimension: 'ROWS',
+        startIndex: endIndex - 1,
+        endIndex,
+      },
+    } as sheets_v4.Schema$DeleteDimensionRequest;
 
-//     if (!req.body) return utils.throwError('Missing body');
-//     if (typeof req.body !== 'object')
-//       return utils.throwError(
-//         'Body should be an object: { ROW_NUMBER: { DATA_TO_UPDATE },... }'
-//       );
+    requests.push({
+      deleteDimension,
+    } as sheets_v4.Schema$Request);
+  });
 
-//     const params = utils.getParams(req.params, ['spreadsheetId', 'sheetName']);
+  // Batch Delete
+  const updatedSheet = await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests,
+    },
+  });
 
-//     const { spreadsheetId, sheetName } = params;
-
-//     const maxColumn = req.query.columnCount
-//       ? utils.numberToLetter(Number(req.query.columnCount))
-//       : 'EE';
-
-//     const headerRange = `${sheetName}!A1:${maxColumn}1`;
-//     const sheetRes = await sheets.spreadsheets.values.get({
-//       spreadsheetId,
-//       range: headerRange,
-//     });
-//     const headerRow = sheetRes.data.values[0];
-
-//     const data = [];
-
-//     // Existing columns
-//     const columns = {};
-//     headerRow.forEach((columnName, columnIndex) => {
-//       columns[columnName] = `${sheetName}!${utils.numberToLetter(
-//         columnIndex + 1
-//       )}`;
-//     });
-
-//     // Build data to update
-//     Object.keys(req.body).forEach((rowNumber) => {
-//       const body = req.body[rowNumber];
-
-//       // New columns
-//       let newColCount = 0;
-//       Object.keys(body).forEach((k) => {
-//         if (!columns[k]) {
-//           newColCount += 1;
-//           columns[k] = `${sheetName}!${utils.numberToLetter(
-//             headerRow.length + newColCount
-//           )}`;
-//           data.push({
-//             range: `${columns[k]}1`,
-//             values: [[k]],
-//           });
-//         }
-//       });
-
-//       // ValueRange
-//       Object.keys(body).forEach((columnName) => {
-//         data.push({
-//           range: `${columns[columnName]}${rowNumber}`,
-//           values: [[body[columnName]]],
-//         });
-//       });
-//     });
-
-//     // Batch Update
-//     const updatedSheet = await sheets.spreadsheets.values.batchUpdate({
-//       spreadsheetId,
-//       resource: {
-//         valueInputOption: req.query.valueInputOption || 'USER_ENTERED',
-//         data,
-//       },
-//     });
-
-//     return res.send(updatedSheet.data.responses);
-//   } catch (e) {
-//     if (e.response) {
-//       const error = new Error(e.response.data.error.message);
-//       error.status = e.response.data.error.code;
-//       return next(error);
-//     }
-//     return next(e);
-//   }
-// });
-
-// // --------------
-// // DELETE /gsheet/:spreadsheetId/:sheetName
-// // --------------
-// router.delete('/:spreadsheetId/:sheetName', async (req, res, next) => {
-//   try {
-//     // Validations
-//     if (!req.params.spreadsheetId)
-//       return utils.throwError('Missing spreadsheetId', 400);
-//     if (!req.params.sheetName)
-//       return utils.throwError('Missing sheetName', 400);
-//     if (!req.body) return utils.throwError('Missing body');
-//     if (!Array.isArray(req.body))
-//       return utils.throwError('Body should be an array: [ ROW_NUMBER... ]');
-//     const params = utils.getParams(req.params, ['spreadsheetId', 'sheetName']);
-
-//     const { spreadsheetId, sheetName } = params;
-
-//     // Get sheetId
-//     const sheetRes = await sheets.spreadsheets.get({
-//       spreadsheetId,
-//     });
-
-//     const sheetInfo = sheetRes.data.sheets.find(
-//       (d) => d.properties.title === sheetName
-//     );
-//     if (!sheetInfo) return utils.throwError('Sheet not found', 404);
-
-//     const { sheetId } = sheetInfo.properties;
-
-//     // Build requests (we should delete from the bottom to top)
-//     const rowNumbers = req.body.map((d) => Number(d));
-//     rowNumbers.sort((a, b) => b - a);
-
-//     const requests = [];
-//     rowNumbers.forEach((endIndex) => {
-//       requests.push({
-//         deleteDimension: {
-//           range: {
-//             sheetId,
-//             dimension: 'ROWS',
-//             startIndex: endIndex - 1,
-//             endIndex,
-//           },
-//         },
-//       });
-//     });
-
-//     // Batch Delete
-//     const updatedSheet = await sheets.spreadsheets.batchUpdate({
-//       spreadsheetId,
-//       requestBody: {
-//         requests,
-//       },
-//     });
-
-//     return res.send({ deletedRows: updatedSheet.data.replies.length });
-//   } catch (e) {
-//     if (e.response) {
-//       const error = new Error(e.response.data.error.message);
-//       error.status = e.response.data.error.code;
-//       return next(error);
-//     }
-//     return next(e);
-//   }
-// });
+  return { deletedRows: updatedSheet?.data?.replies?.length || 0 };
+}
 
 // // --------------
 // // POST /:spreadsheetId/:sheetName
@@ -485,3 +325,145 @@ export async function getDataBySheetName(
 //     return next(e);
 //   }
 // });
+
+
+// // --------------
+// // PUT /gsheet/:spreadsheetId/:sheetName
+// // --------------
+// router.put('/:spreadsheetId/:sheetName', async (req, res, next) => {
+//   try {
+//     // Validations
+//     if (!req.params.spreadsheetId)
+//       return utils.throwError('Missing spreadsheetId', 400);
+//     if (!req.params.sheetName)
+//       return utils.throwError('Missing sheetName', 400);
+
+//     if (!req.body) return utils.throwError('Missing body');
+//     if (typeof req.body !== 'object')
+//       return utils.throwError(
+//         'Body should be an object: { ROW_NUMBER: { DATA_TO_UPDATE },... }'
+//       );
+
+//     const params = utils.getParams(req.params, ['spreadsheetId', 'sheetName']);
+
+//     const { spreadsheetId, sheetName } = params;
+
+//     const maxColumn = req.query.columnCount
+//       ? utils.numberToLetter(Number(req.query.columnCount))
+//       : 'EE';
+
+//     const headerRange = `${sheetName}!A1:${maxColumn}1`;
+//     const sheetRes = await sheets.spreadsheets.values.get({
+//       spreadsheetId,
+//       range: headerRange,
+//     });
+//     const headerRow = sheetRes.data.values[0];
+
+//     const data = [];
+
+//     // Existing columns
+//     const columns = {};
+//     headerRow.forEach((columnName, columnIndex) => {
+//       columns[columnName] = `${sheetName}!${utils.numberToLetter(
+//         columnIndex + 1
+//       )}`;
+//     });
+
+//     // Build data to update
+//     Object.keys(req.body).forEach((rowNumber) => {
+//       const body = req.body[rowNumber];
+
+//       // New columns
+//       let newColCount = 0;
+//       Object.keys(body).forEach((k) => {
+//         if (!columns[k]) {
+//           newColCount += 1;
+//           columns[k] = `${sheetName}!${utils.numberToLetter(
+//             headerRow.length + newColCount
+//           )}`;
+//           data.push({
+//             range: `${columns[k]}1`,
+//             values: [[k]],
+//           });
+//         }
+//       });
+
+//       // ValueRange
+//       Object.keys(body).forEach((columnName) => {
+//         data.push({
+//           range: `${columns[columnName]}${rowNumber}`,
+//           values: [[body[columnName]]],
+//         });
+//       });
+//     });
+
+//     // Batch Update
+//     const updatedSheet = await sheets.spreadsheets.values.batchUpdate({
+//       spreadsheetId,
+//       resource: {
+//         valueInputOption: req.query.valueInputOption || 'USER_ENTERED',
+//         data,
+//       },
+//     });
+
+//     return res.send(updatedSheet.data.responses);
+//   } catch (e) {
+//     if (e.response) {
+//       const error = new Error(e.response.data.error.message);
+//       error.status = e.response.data.error.code;
+//       return next(error);
+//     }
+//     return next(e);
+//   }
+// });
+
+// // --------------
+// // GET /gsheet/:spreadsheetId/:sheetName/:rowNumber
+// // --------------
+// router.get(
+//   '/:spreadsheetId([a-zA-Z0-9-_]+)/:sheetName/:rowNumber',
+//   async (req, res, next) => {
+//     try {
+//       // Validations
+//       if (!req.params.spreadsheetId)
+//         return utils.throwError('Missing spreadsheetId', 400);
+//       if (!req.params.sheetName)
+//         return utils.throwError('Missing sheetName', 400);
+//       const params = utils.getParams(req.params, [
+//         'spreadsheetId',
+//         'sheetName',
+//         'rowNumber',
+//       ]);
+//       const { rowNumber } = req.params;
+
+//       const { spreadsheetId, sheetName } = params;
+
+//       const maxColumn = req.query.columnCount
+//         ? utils.numberToLetter(Number(req.query.columnCount))
+//         : 'EE';
+
+//       const headerRange = `${sheetName}!A1:${maxColumn}1`;
+//       const dataRange = `${sheetName}!A${rowNumber}:${maxColumn}${rowNumber}`;
+
+//       const sheetRes = await sheets.spreadsheets.values.batchGet({
+//         spreadsheetId,
+//         ranges: [headerRange, dataRange],
+//       });
+//       const headerRow = sheetRes.data.valueRanges[0].values[0];
+//       const rows = sheetRes.data.valueRanges[1].values;
+//       const row = { rowNumber: Number(rowNumber) };
+//       headerRow.forEach((columnName, columnIndex) => {
+//         row[columnName] = utils.detectValues(rows[0][columnIndex]);
+//       });
+
+//       return res.send(row);
+//     } catch (e) {
+//       if (e.response) {
+//         const error = new Error(e.response.data.error.message);
+//         error.status = e.response.data.error.code;
+//         return next(error);
+//       }
+//       return next(e);
+//     }
+//   }
+// );
