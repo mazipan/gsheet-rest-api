@@ -1,0 +1,325 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Swagger GSheet Rest API - OpenAPI 3.0",
+    "description": "Simple yet deployable rest API for your Google Sheet. Turn your Google Sheet into API.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Sheet",
+      "description": "Managing spreadsheet"
+    }
+  ],
+  "paths": {
+    "/sheets": {
+      "get": {
+        "tags": [
+          "Sheet"
+        ],
+        "summary": "List all files",
+        "description": "List down all the spreadsheets can be accessed by the service account.",
+        "operationId": "getAllFileList",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Spreadsheet"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Empty data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Something bad happened!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sheets/{spreadsheet_id}": {
+      "get": {
+        "tags": [
+          "Sheet"
+        ],
+        "summary": "Get the sheets info",
+        "description": "Get the sheets available by using spreadsheet id",
+        "operationId": "getSheetsBySpreadsheetId",
+        "parameters": [
+          {
+            "name": "spreadsheet_id",
+            "in": "path",
+            "description": "ID from the spreadsheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SheetInfo"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+              "description": "Empty data",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Something bad happened!"
+                      },
+                      "data": {
+                        "type": "array",
+                        "example": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        }
+      }
+    },
+    "/sheets/{spreadsheet_id}/{sheet_name}": {
+      "get": {
+        "tags": [
+          "Sheet"
+        ],
+        "summary": "Get the data from the sheet",
+        "description": "Get the columns and the data with pagination.",
+        "operationId": "findPetsByTags",
+        "parameters": [
+          {
+            "name": "spreadsheet_id",
+            "in": "path",
+            "description": "ID from the spreadsheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg"
+            }
+          },
+          {
+            "name": "sheet_name",
+            "in": "path",
+            "description": "Title from the sheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Sheet 1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SheetData"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/SheetPagination"
+                    },
+                    "columns": {
+                      "type": "object",
+                      "example": {
+                        "NO": "Sheet1!A",
+                        "SLUG": "Sheet1!B",
+                        "VIEWS": "Sheet1s!C",
+                        "LIKE": "Sheet1!D"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+              "description": "Empty data",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Something bad happened!"
+                      },
+                      "data": {
+                        "type": "array",
+                        "example": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Spreadsheet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg"
+          },
+          "name": {
+            "type": "string",
+            "example": "sample-spreadsheet"
+          },
+          "modifiedTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-02-03T08:58:19.749Z"
+          }
+        }
+      },
+      "SheetInfo": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Sheet1"
+          },
+          "index": {
+            "type": "integer",
+            "format": "int32",
+            "example": 0
+          },
+          "sheetId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "rowCount": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1000
+          },
+          "columnCount": {
+            "type": "integer",
+            "format": "int32",
+            "example": 10
+          }
+        }
+      },
+      "SheetData": {
+        "type": "object",
+        "example": {
+          "_row": 2,
+          "NO": 1,
+          "SLUG": "test",
+          "VIEWS": 100,
+          "LIKE": 1000
+        },
+        "properties": {
+          "_row": {
+            "type": "integer",
+            "format": "int32",
+            "example": 0
+          }
+        }
+      },
+      "SheetPagination": {
+        "type": "object",
+        "properties": {
+          "perPage": {
+            "type": "integer",
+            "format": "int32",
+            "example": 20
+          },
+          "range": {
+            "type": "string",
+            "example": "Sheet1!A2:J101"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32",
+            "example": 0
+          },
+          "nextOffset": {
+            "type": "integer",
+            "format": "int32",
+            "example": 21
+          },
+          "totalItems": {
+            "type": "integer",
+            "format": "int32",
+            "example": 100
+          },
+          "haveNext": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "requestBodies": {},
+    "securitySchemes": {
+      "x-api-key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  }
+}
