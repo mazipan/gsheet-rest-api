@@ -91,16 +91,23 @@ export type DataBySheetIdOptions = {
   columnCount?: number;
 };
 
+export type SheetColumn = {
+  title: string;
+  cell: string;
+}
+
+export type SheetPagination = {
+  perPage: number;
+  cellRange: string;
+  offset: number;
+  nextOffset: number;
+  totalItems: number;
+  haveNext: boolean;
+}
+
 export type GetDataBySheetNameResponse = {
-  columns: Record<string, string>;
-  pagination: {
-    perPage: number;
-    range: string;
-    offset: number;
-    nextOffset: number;
-    totalItems: number;
-    haveNext: boolean;
-  };
+  columns: SheetColumn[];
+  pagination: SheetPagination;
   data: Record<string, string | boolean | number>[];
 };
 
@@ -133,9 +140,13 @@ export async function getDataBySheetName(
       const totalItems = (sheetRes.data.valueRanges[1].values || []).length;
       const rows = sheetRes.data.valueRanges[2].values || [];
 
-      const columns: Record<string, string> = {};
+      const columns: SheetColumn[] = [];
+
       headerRow.forEach((columnName, columnIndex) => {
-        columns[columnName] = `${sheetName}!${numberToLetter(columnIndex + 1)}`;
+        columns.push({
+          title: columnName,
+          cell: `${sheetName}!${numberToLetter(columnIndex + 1)}`
+        });
       });
 
       const data = [];
@@ -155,9 +166,9 @@ export async function getDataBySheetName(
         if (validValuesCount) data.push(row);
       }
 
-      const pagination = {
+      const pagination: SheetPagination = {
         perPage,
-        range: paginatedRange,
+        cellRange: paginatedRange,
         offset,
         nextOffset: offset + perPage,
         totalItems,

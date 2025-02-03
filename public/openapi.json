@@ -177,12 +177,9 @@
                       "$ref": "#/components/schemas/SheetPagination"
                     },
                     "columns": {
-                      "type": "object",
-                      "example": {
-                        "NO": "Sheet1!A",
-                        "SLUG": "Sheet1!B",
-                        "VIEWS": "Sheet1s!C",
-                        "LIKE": "Sheet1!D"
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SheetColumn"
                       }
                     }
                   }
@@ -288,7 +285,7 @@
             "format": "int32",
             "example": 20
           },
-          "range": {
+          "cellRange": {
             "type": "string",
             "example": "Sheet1!A2:J101"
           },
@@ -309,6 +306,19 @@
           },
           "haveNext": {
             "type": "boolean"
+          }
+        }
+      },
+      "SheetColumn": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Title"
+          },
+          "cell": {
+            "type": "string",
+            "example": "Sheet1!A"
           }
         }
       }
