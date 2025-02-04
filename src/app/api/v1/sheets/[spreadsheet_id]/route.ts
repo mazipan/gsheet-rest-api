@@ -1,9 +1,25 @@
 import { getSheetsBySpreadsheetId } from '@/utils/sheets'
+import { headers } from 'next/headers'
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ spreadsheet_id: string }> }
 ) {
+  const headersList = await headers()
+  const apiKey = headersList.get('X-Api-Key')
+
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return Response.json(
+      {
+        message: 'Header X-Api-Key is not valid!',
+        data: [],
+      },
+      {
+        status: 401,
+      }
+    )
+  }
+
   const { spreadsheet_id } = await params
 
   if (!spreadsheet_id) {

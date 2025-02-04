@@ -1,4 +1,5 @@
 import { removeSheetRows } from '@/utils/sheets'
+import { headers } from 'next/headers'
 import { NextRequest } from 'next/server'
 
 export async function DELETE(
@@ -13,6 +14,21 @@ export async function DELETE(
     }>
   }
 ) {
+  const headersList = await headers()
+  const apiKey = headersList.get('X-Api-Key')
+
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return Response.json(
+      {
+        message: 'Header X-Api-Key is not valid!',
+        data: [],
+      },
+      {
+        status: 401,
+      }
+    )
+  }
+
   const { spreadsheet_id, sheet_name, rows } = await params
   const deletedRows = (rows || '').split(',')
 

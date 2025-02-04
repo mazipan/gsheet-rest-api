@@ -44,7 +44,7 @@ export default function Home() {
       <footer className="row-start-3 flex flex-wrap items-center justify-center gap-6">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://github.com/mazipan/gsheet-rest-ap"
+          href="https://github.com/mazipan/gsheet-rest-api"
           target="_blank"
           rel="noopener noreferrer"
         >

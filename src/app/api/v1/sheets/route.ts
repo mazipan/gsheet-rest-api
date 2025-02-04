@@ -1,6 +1,22 @@
 import { getAllFileList } from '@/utils/sheets'
+import { headers } from 'next/headers'
 
 export async function GET() {
+  const headersList = await headers()
+  const apiKey = headersList.get('X-Api-Key')
+
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return Response.json(
+      {
+        message: 'Header X-Api-Key is not valid!',
+        data: [],
+      },
+      {
+        status: 401,
+      }
+    )
+  }
+
   const res = await getAllFileList()
 
   if (res && res.length > 0) {

@@ -3,6 +3,7 @@ import {
   getDataBySheetName,
   updateSheetRow,
 } from '@/utils/sheets'
+import { headers } from 'next/headers';
 import { NextRequest } from 'next/server'
 
 export async function GET(
@@ -11,6 +12,21 @@ export async function GET(
     params,
   }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
+  const headersList = await headers()
+  const apiKey = headersList.get('X-Api-Key')
+
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return Response.json(
+      {
+        message: 'Header X-Api-Key is not valid!',
+        data: [],
+      },
+      {
+        status: 401,
+      }
+    )
+  }
+
   const searchParams = request.nextUrl.searchParams
   const offset = searchParams.get('offset')
   const perPage = searchParams.get('per_page')
@@ -63,6 +79,21 @@ export async function PUT(
     params,
   }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
+  const headersList = await headers()
+  const apiKey = headersList.get('X-Api-Key')
+
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return Response.json(
+      {
+        message: 'Header X-Api-Key is not valid!',
+        data: [],
+      },
+      {
+        status: 401,
+      }
+    )
+  }
+
   const searchParams = request.nextUrl.searchParams
 
   const inputOptions = searchParams.get('input_options') || 'USER_ENTERED'
@@ -125,6 +156,21 @@ export async function POST(
     params,
   }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
+  const headersList = await headers()
+  const apiKey = headersList.get('X-Api-Key')
+
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return Response.json(
+      {
+        message: 'Header X-Api-Key is not valid!',
+        data: [],
+      },
+      {
+        status: 401,
+      }
+    )
+  }
+
   const searchParams = request.nextUrl.searchParams
 
   const inputOptions = searchParams.get('input_options') || 'USER_ENTERED'
