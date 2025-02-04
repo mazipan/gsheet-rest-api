@@ -1,34 +1,32 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { google, type sheets_v4 } from 'googleapis';
-import { detectValues, numberToLetter } from './utils';
+import { google, type sheets_v4 } from 'googleapis'
+import { detectValues, numberToLetter } from './utils'
 
 // :oad the environment variable with our keys
-const keysEnvVar = process.env.GOOGLE_CREDENTIALS as string;
+const keysEnvVar = process.env.GOOGLE_CREDENTIALS as string
 if (!keysEnvVar) {
-  throw new Error(
-    'The $GOOGLE_CREDENTIALS environment variable was not found!'
-  );
+  throw new Error('The $GOOGLE_CREDENTIALS environment variable was not found!')
 }
 
-const env = JSON.parse(keysEnvVar);
+const env = JSON.parse(keysEnvVar)
 
 const auth = new google.auth.JWT({
   email: env.client_email,
   key: env.private_key,
   scopes: ['https://www.googleapis.com/auth/drive'],
-});
+})
 
-const drive = google.drive({ version: 'v3', auth });
-const sheets = google.sheets({ version: 'v4', auth });
+const drive = google.drive({ version: 'v3', auth })
+const sheets = google.sheets({ version: 'v4', auth })
 
 export type GetAllFileListResponse = {
-  id: string;
-  name: string;
+  id: string
+  name: string
   /**
    * @sample: In format "2025-02-03T08:58:19.749Z"
    */
-  modifiedTime: string;
-};
+  modifiedTime: string
+}
 
 export async function getAllFileList(): Promise<GetAllFileListResponse[]> {
   try {
@@ -37,22 +35,22 @@ export async function getAllFileList(): Promise<GetAllFileListResponse[]> {
       fields: 'files(id, name, modifiedTime)',
       spaces: 'drive',
       pageSize: 10,
-    });
+    })
 
-    return driveRes.data.files as GetAllFileListResponse[];
+    return driveRes.data.files as GetAllFileListResponse[]
   } catch (e) {
-    console.error('Got error when invoke getAllFileList', e);
-    return [];
+    console.error('Got error when invoke getAllFileList', e)
+    return []
   }
 }
 
 export type GetSheetsBySpreadsheetIdResponse = {
-  title: string;
-  index: number;
-  sheetId: number;
-  rowCount: number;
-  columnCount: number;
-};
+  title: string
+  index: number
+  sheetId: number
+  rowCount: number
+  columnCount: number
+}
 
 export async function getSheetsBySpreadsheetId(
   spreadsheetId: string
@@ -60,7 +58,7 @@ export async function getSheetsBySpreadsheetId(
   try {
     const sheetRes = await sheets.spreadsheets.get({
       spreadsheetId,
-    });
+    })
 
     if (sheetRes && sheetRes.data && sheetRes.data.sheets) {
       const output = sheetRes.data.sheets.map(
@@ -71,45 +69,45 @@ export async function getSheetsBySpreadsheetId(
             sheetId: d?.properties?.sheetId,
             rowCount: d?.properties?.gridProperties?.rowCount,
             columnCount: d?.properties?.gridProperties?.columnCount,
-          } as GetSheetsBySpreadsheetIdResponse)
-      );
+          }) as GetSheetsBySpreadsheetIdResponse
+      )
 
-      return output;
+      return output
     } else {
-      console.warn('Got empty result when invoke getBySpreadsheetId');
-      return null;
+      console.warn('Got empty result when invoke getSheetsBySpreadsheetId')
+      return null
     }
   } catch (e) {
-    console.error('Got error when invoke getBySpreadsheetId', e);
-    return null;
+    console.error('Got error when invoke getSheetsBySpreadsheetId', e)
+    return null
   }
 }
 
 export type DataBySheetIdOptions = {
-  offset?: number;
-  perPage?: number;
-  columnCount?: number;
-};
+  offset?: number
+  perPage?: number
+  columnCount?: number
+}
 
 export type SheetColumn = {
-  title: string;
-  cell: string;
-};
+  title: string
+  cell: string
+}
 
 export type SheetPagination = {
-  perPage: number;
-  cellRange: string;
-  offset: number;
-  nextOffset: number;
-  totalItems: number;
-  haveNext: boolean;
-};
+  perPage: number
+  cellRange: string
+  offset: number
+  nextOffset: number
+  totalItems: number
+  haveNext: boolean
+}
 
 export type GetDataBySheetNameResponse = {
-  columns: SheetColumn[];
-  pagination: SheetPagination;
-  data: Record<string, string | boolean | number>[];
-};
+  columns: SheetColumn[]
+  pagination: SheetPagination
+  data: Record<string, string | boolean | number>[]
+}
 
 export async function getDataBySheetName(
   spreadsheetId: string,
@@ -117,53 +115,53 @@ export async function getDataBySheetName(
   options: DataBySheetIdOptions = { offset: 2, perPage: 100, columnCount: 10 }
 ): Promise<GetDataBySheetNameResponse | null> {
   try {
-    const offset = options?.offset || 2;
-    const perPage = options?.perPage || 100;
-    const columnCount = options?.columnCount || 10;
+    const offset = options?.offset || 2
+    const perPage = options?.perPage || 100
+    const columnCount = options?.columnCount || 10
 
-    const firstRow = offset;
-    const lastRow = offset + perPage - 1;
+    const firstRow = offset
+    const lastRow = offset + perPage - 1
 
-    const maxColumn = columnCount ? numberToLetter(Number(columnCount)) : 'EE';
+    const maxColumn = columnCount ? numberToLetter(Number(columnCount)) : 'EE'
 
-    const headerRange = `${sheetName}!A1:${maxColumn}1`;
-    const countRange = `${sheetName}!A2:A`;
-    const paginatedRange = `${sheetName}!A${firstRow}:${maxColumn}${lastRow}`;
+    const headerRange = `${sheetName}!A1:${maxColumn}1`
+    const countRange = `${sheetName}!A2:A`
+    const paginatedRange = `${sheetName}!A${firstRow}:${maxColumn}${lastRow}`
 
     const sheetRes = await sheets.spreadsheets.values.batchGet({
       spreadsheetId,
       ranges: [headerRange, countRange, paginatedRange],
-    });
+    })
 
     if (sheetRes && sheetRes.data && sheetRes.data.valueRanges) {
-      const headerRow = sheetRes.data.valueRanges?.[0]?.values?.[0] || [];
-      const totalItems = (sheetRes.data.valueRanges[1].values || []).length;
-      const rows = sheetRes.data.valueRanges[2].values || [];
+      const headerRow = sheetRes.data.valueRanges?.[0]?.values?.[0] || []
+      const totalItems = (sheetRes.data.valueRanges[1].values || []).length
+      const rows = sheetRes.data.valueRanges[2].values || []
 
-      const columns: SheetColumn[] = [];
+      const columns: SheetColumn[] = []
 
       headerRow.forEach((columnName, columnIndex) => {
         columns.push({
           title: columnName,
           cell: `${sheetName}!${numberToLetter(columnIndex + 1)}`,
-        });
-      });
+        })
+      })
 
-      const data = [];
+      const data = []
       for (let i = 0; i < rows.length; i += 1) {
-        const row = {};
-        let validValuesCount = 0;
+        const row = {}
+        let validValuesCount = 0
         // @ts-ignore
-        row._row = firstRow + i;
+        row._row = firstRow + i
         headerRow.forEach((columnName, columnIndex) => {
           // @ts-ignore
-          row[columnName] = detectValues(rows[i][columnIndex]);
+          row[columnName] = detectValues(rows[i][columnIndex])
 
           // @ts-ignore
-          if (row[columnName]) validValuesCount += 1;
-        });
+          if (row[columnName]) validValuesCount += 1
+        })
 
-        if (validValuesCount) data.push(row);
+        if (validValuesCount) data.push(row)
       }
 
       const pagination: SheetPagination = {
@@ -173,249 +171,248 @@ export async function getDataBySheetName(
         nextOffset: offset + perPage,
         totalItems,
         haveNext: totalItems > offset + perPage,
-      };
+      }
 
-      return { columns, pagination, data } as GetDataBySheetNameResponse;
+      return { columns, pagination, data } as GetDataBySheetNameResponse
     } else {
-      console.warn('Got empty result when invoke getDataBySheetId');
-      return null;
+      console.warn('Got empty result when invoke getDataBySheetId')
+      return null
     }
   } catch (e) {
-    console.error('Got error when invoke getDataBySheetId', e);
-    return null;
+    console.error('Got error when invoke getDataBySheetName', e)
+    return null
   }
 }
 
-export async function removeRows(spreadsheetId: string, sheetName: string, rows: string[]) {
-  // Get sheetId
-  const sheetRes = await sheets.spreadsheets.get({
-    spreadsheetId,
-  });
+export async function removeSheetRows(
+  spreadsheetId: string,
+  sheetName: string,
+  rows: string[]
+) {
+  try {
+    // Get sheetId
+    const sheetRes = await sheets.spreadsheets.get({
+      spreadsheetId,
+    })
 
-  if (!sheetRes || !sheetRes.data || !sheetRes.data.sheets) return null;
+    if (!sheetRes || !sheetRes.data || !sheetRes.data.sheets) return null
 
-  const sheetInfo = sheetRes.data.sheets.find(
-    (d) => d?.properties?.title === sheetName
-  );
+    const sheetInfo = sheetRes.data.sheets.find(
+      (d) => d?.properties?.title === sheetName
+    )
 
-  if (!sheetInfo) return null;
+    if (!sheetInfo) return null
 
-  const sheetId = sheetInfo.properties?.sheetId;
+    const sheetId = sheetInfo.properties?.sheetId
 
-  // Build requests (we should delete from the bottom to top)
-  const rowNumbers = rows.map((d) => Number(d));
-  rowNumbers.sort((a, b) => b - a);
+    // Build requests (we should delete from the bottom to top)
+    const rowNumbers = rows.map((d) => Number(d))
+    rowNumbers.sort((a, b) => b - a)
 
-  const requests: sheets_v4.Schema$Request[] = [];
-  rowNumbers.forEach((endIndex: number) => {
-    const deleteDimension = {
-      range: {
-        sheetId,
-        dimension: 'ROWS',
-        startIndex: endIndex - 1,
-        endIndex,
+    const requests: sheets_v4.Schema$Request[] = []
+    rowNumbers.forEach((endIndex: number) => {
+      const deleteDimension = {
+        range: {
+          sheetId,
+          dimension: 'ROWS',
+          startIndex: endIndex - 1,
+          endIndex,
+        },
+      } as sheets_v4.Schema$DeleteDimensionRequest
+
+      requests.push({
+        deleteDimension,
+      } as sheets_v4.Schema$Request)
+    })
+
+    // Batch Delete
+    const updatedSheet = await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        requests,
       },
-    } as sheets_v4.Schema$DeleteDimensionRequest;
+    })
 
-    requests.push({
-      deleteDimension,
-    } as sheets_v4.Schema$Request);
-  });
-
-  // Batch Delete
-  const updatedSheet = await sheets.spreadsheets.batchUpdate({
-    spreadsheetId,
-    requestBody: {
-      requests,
-    },
-  });
-
-  return { deletedRows: updatedSheet?.data?.replies?.length || 0 };
+    return { deleted_rows: updatedSheet?.data?.replies?.length || 0 }
+  } catch (e) {
+    console.error('Got error when invoke removeSheetRows', e)
+    return { deleted_rows: 0 }
+  }
 }
 
-// // --------------
-// // POST /:spreadsheetId/:sheetName
-// // --------------
-// router.post('/:spreadsheetId/:sheetName', async (req, res, next) => {
-//   try {
-//     // Validations
-//     if (!req.params.spreadsheetId)
-//       return utils.throwError('Missing spreadsheetId', 400);
-//     if (!req.params.sheetName)
-//       return utils.throwError('Missing sheetName', 400);
-//     if (!req.body) return utils.throwError('Missing body');
-//     if (!Array.isArray(req.body))
-//       return utils.throwError('Body should be an array: [ ROW... ]');
+export type UpdateSheetOptions = {
+  columnCount?: number
+  valueInputOption?: 'USER_ENTERED' | 'RAW'
+}
 
-//     const params = utils.getParams(req.params, ['spreadsheetId', 'sheetName']);
+// Sample Body: { "4" : { "email": "john@appleseed.com" }, "1": { "phone": "415-500-7000" } }
+export async function updateSheetRow(
+  spreadsheetId: string,
+  sheetName: string,
+  bodyData: Record<string, Record<string, unknown>>,
+  options: UpdateSheetOptions = {
+    valueInputOption: 'USER_ENTERED',
+    columnCount: 10,
+  }
+): Promise<sheets_v4.Schema$UpdateValuesResponse | null> {
+  try {
+    const columnCount = options?.columnCount || 10
+    const maxColumn = columnCount ? numberToLetter(Number(columnCount)) : 'EE'
 
-//     const { spreadsheetId, sheetName } = params;
+    const headerRange = `${sheetName}!A1:${maxColumn}1`
+    const sheetRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: headerRange,
+    })
 
-//     const maxColumn = req.query.columnCount
-//       ? utils.numberToLetter(Number(req.query.columnCount))
-//       : 'EE';
-//     const defaultRange = `${sheetName}!A:${maxColumn}`;
+    if (
+      sheetRes &&
+      sheetRes.data &&
+      sheetRes.data.values &&
+      sheetRes.data.values.length > 0
+    ) {
+      const headerRow = sheetRes.data.values[0]
+      const data: sheets_v4.Schema$ValueRange[] = []
 
-//     const sheetRes = await sheets.spreadsheets.values.get({
-//       spreadsheetId,
-//       range: defaultRange,
-//     });
-//     const rows = sheetRes.data.values;
+      // Existing columns
+      const columns: Record<string, unknown> = {}
+      headerRow.forEach((columnName, columnIndex) => {
+        columns[columnName] = `${sheetName}!${numberToLetter(columnIndex + 1)}`
+      })
 
-//     // Existing columns
-//     const columns = {};
-//     const columnList = (rows ? rows[0] : []).slice();
-//     columnList.forEach((columnName, columnIndex) => {
-//       columns[columnName] = `${sheetName}!${utils.numberToLetter(
-//         columnIndex + 1
-//       )}`;
-//     });
+      // Build data to update
+      Object.keys(bodyData).forEach((rowNumber) => {
+        const body = bodyData[rowNumber]
 
-//     // Check if there's new columns
-//     let newColCount = 0;
-//     const data = [];
-//     req.body.forEach((body) => {
-//       Object.keys(body).forEach((k) => {
-//         if (!columns[k]) {
-//           newColCount += 1;
-//           columns[k] = `${sheetName}!${utils.numberToLetter(
-//             columnList.length + 1
-//           )}`;
-//           columnList.push(k);
-//           data.push({
-//             range: `${columns[k]}1`,
-//             values: [[k]],
-//           });
-//         }
-//       });
-//     });
-//     if (newColCount) {
-//       await sheets.spreadsheets.values.batchUpdate({
-//         spreadsheetId,
-//         resource: {
-//           valueInputOption: req.query.valueInputOption || 'USER_ENTERED',
-//           data,
-//         },
-//       });
-//     }
+        // New columns
+        let newColCount = 0
+        Object.keys(body).forEach((k) => {
+          if (!columns[k]) {
+            newColCount += 1
+            columns[k] = `${sheetName}!${numberToLetter(
+              headerRow.length + newColCount
+            )}`
+            data.push({
+              range: `${columns[k]}1`,
+              values: [[k]],
+            })
+          }
+        })
 
-//     const values = req.body.map((r) => columnList.map((c) => r[c] || ''));
+        // ValueRange
+        Object.keys(body).forEach((columnName) => {
+          data.push({
+            range: `${columns[columnName]}${rowNumber}`,
+            values: [[body[columnName]]],
+          })
+        })
+      })
 
-//     // Append
-//     const appendedSheet = await sheets.spreadsheets.values.append({
-//       spreadsheetId,
-//       range: defaultRange,
-//       valueInputOption: req.query.valueInputOption || 'USER_ENTERED',
-//       includeValuesInResponse: true,
-//       insertDataOption: 'INSERT_ROWS',
-//       resource: {
-//         values,
-//       },
-//     });
+      // Batch Update
+      const updatedSheet = await sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId,
+        requestBody: {
+          valueInputOption: options.valueInputOption || 'USER_ENTERED',
+          data,
+        },
+      })
 
-//     // Output
-//     const { updatedRows } = appendedSheet.data.updates;
-//     return res.send({ insertedRow: updatedRows });
-//   } catch (e) {
-//     if (e.response) {
-//       const error = new Error(e.response.data.error.message);
-//       error.status = e.response.data.error.code;
-//       return next(error);
-//     }
-//     return next(e);
-//   }
-// });
+      return updatedSheet.data
+        .responses as sheets_v4.Schema$UpdateValuesResponse
+    }
 
+    return null
+  } catch (e) {
+    console.error('Got error when invoke updateSheetRow', e)
+    return null
+  }
+}
 
-// // --------------
-// // PUT /gsheet/:spreadsheetId/:sheetName
-// // --------------
-// router.put('/:spreadsheetId/:sheetName', async (req, res, next) => {
-//   try {
-//     // Validations
-//     if (!req.params.spreadsheetId)
-//       return utils.throwError('Missing spreadsheetId', 400);
-//     if (!req.params.sheetName)
-//       return utils.throwError('Missing sheetName', 400);
+// Sample Body: [{ "name": "Jean", "email": "jean@appleseed.com" }, { "name": "Bunny", "email": "bunny@appleseed.com" }]
+export async function appendSheetRow(
+  spreadsheetId: string,
+  sheetName: string,
+  bodyData: Record<string, unknown>[],
+  options: UpdateSheetOptions = {
+    valueInputOption: 'USER_ENTERED',
+    columnCount: 10,
+  }
+): Promise<sheets_v4.Schema$UpdateValuesResponse | null> {
+  try {
+    const columnCount = options?.columnCount || 10
+    const maxColumn = columnCount ? numberToLetter(Number(columnCount)) : 'EE'
 
-//     if (!req.body) return utils.throwError('Missing body');
-//     if (typeof req.body !== 'object')
-//       return utils.throwError(
-//         'Body should be an object: { ROW_NUMBER: { DATA_TO_UPDATE },... }'
-//       );
+    const defaultRange = `${sheetName}!A:${maxColumn}`
+    const sheetRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: defaultRange,
+    })
 
-//     const params = utils.getParams(req.params, ['spreadsheetId', 'sheetName']);
+    if (
+      sheetRes &&
+      sheetRes.data &&
+      sheetRes.data.values &&
+      sheetRes.data.values.length > 0
+    ) {
+      const rows = sheetRes.data.values
 
-//     const { spreadsheetId, sheetName } = params;
+      // Existing columns
+      const columns: Record<string, unknown> = {}
+      const columnList = (rows ? rows[0] : []).slice()
+      columnList.forEach((columnName, columnIndex) => {
+        columns[columnName] = `${sheetName}!${numberToLetter(columnIndex + 1)}`
+      })
 
-//     const maxColumn = req.query.columnCount
-//       ? utils.numberToLetter(Number(req.query.columnCount))
-//       : 'EE';
+      // Check if there's new columns
+      let newColCount = 0
+      const data: sheets_v4.Schema$ValueRange[] = []
+      bodyData.forEach((body) => {
+        Object.keys(body).forEach((k) => {
+          if (!columns[k]) {
+            newColCount += 1
+            columns[k] = `${sheetName}!${numberToLetter(columnList.length + 1)}`
+            columnList.push(k)
+            data.push({
+              range: `${columns[k]}1`,
+              values: [[k]],
+            })
+          }
+        })
+      })
 
-//     const headerRange = `${sheetName}!A1:${maxColumn}1`;
-//     const sheetRes = await sheets.spreadsheets.values.get({
-//       spreadsheetId,
-//       range: headerRange,
-//     });
-//     const headerRow = sheetRes.data.values[0];
+      if (newColCount) {
+        await sheets.spreadsheets.values.batchUpdate({
+          spreadsheetId,
+          requestBody: {
+            valueInputOption: options.valueInputOption || 'USER_ENTERED',
+            data,
+          },
+        })
+      }
 
-//     const data = [];
+      const values = bodyData.map((r) => columnList.map((c) => r[c] || ''))
 
-//     // Existing columns
-//     const columns = {};
-//     headerRow.forEach((columnName, columnIndex) => {
-//       columns[columnName] = `${sheetName}!${utils.numberToLetter(
-//         columnIndex + 1
-//       )}`;
-//     });
+      // Append
+      const appendedSheet = await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: defaultRange,
+        valueInputOption: options.valueInputOption || 'USER_ENTERED',
+        includeValuesInResponse: true,
+        insertDataOption: 'INSERT_ROWS',
+        requestBody: {
+          values,
+        },
+      })
 
-//     // Build data to update
-//     Object.keys(req.body).forEach((rowNumber) => {
-//       const body = req.body[rowNumber];
+      return appendedSheet?.data?.updates || null
+    }
 
-//       // New columns
-//       let newColCount = 0;
-//       Object.keys(body).forEach((k) => {
-//         if (!columns[k]) {
-//           newColCount += 1;
-//           columns[k] = `${sheetName}!${utils.numberToLetter(
-//             headerRow.length + newColCount
-//           )}`;
-//           data.push({
-//             range: `${columns[k]}1`,
-//             values: [[k]],
-//           });
-//         }
-//       });
-
-//       // ValueRange
-//       Object.keys(body).forEach((columnName) => {
-//         data.push({
-//           range: `${columns[columnName]}${rowNumber}`,
-//           values: [[body[columnName]]],
-//         });
-//       });
-//     });
-
-//     // Batch Update
-//     const updatedSheet = await sheets.spreadsheets.values.batchUpdate({
-//       spreadsheetId,
-//       resource: {
-//         valueInputOption: req.query.valueInputOption || 'USER_ENTERED',
-//         data,
-//       },
-//     });
-
-//     return res.send(updatedSheet.data.responses);
-//   } catch (e) {
-//     if (e.response) {
-//       const error = new Error(e.response.data.error.message);
-//       error.status = e.response.data.error.code;
-//       return next(error);
-//     }
-//     return next(e);
-//   }
-// });
+    return null
+  } catch (e) {
+    console.error('Got error when invoke appendSheetRow', e)
+    return null
+  }
+}
 
 // // --------------
 // // GET /gsheet/:spreadsheetId/:sheetName/:rowNumber

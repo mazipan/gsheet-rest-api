@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "Swagger GSheet Rest API - OpenAPI 3.0",
-    "description": "Simple yet deployable rest API for your Google Sheet. Turn your Google Sheet into API.",
+    "title": "GSheet Rest API",
+    "description": "Simple yet deployable rest API for your Google Sheet. Turn your Google Sheet into API. \n\n[![GitHub Repo stars](https://img.shields.io/github/stars/mazipan/gsheet-rest-api)](https://github.com/mazipan/gsheet-rest-api)",
     "version": "1.0.0"
   },
   "servers": [
@@ -19,9 +19,7 @@
   "paths": {
     "/sheets": {
       "get": {
-        "tags": [
-          "Sheet"
-        ],
+        "tags": ["Sheet"],
         "summary": "List all files",
         "description": "List down all the spreadsheets can be accessed by the service account.",
         "operationId": "getAllFileList",
@@ -69,10 +67,8 @@
     },
     "/sheets/{spreadsheet_id}": {
       "get": {
-        "tags": [
-          "Sheet"
-        ],
-        "summary": "Get the sheets info",
+        "tags": ["Sheet"],
+        "summary": "Get the sheet's info",
         "description": "Get the sheets available by using spreadsheet id",
         "operationId": "getSheetsBySpreadsheetId",
         "parameters": [
@@ -89,7 +85,7 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
@@ -107,36 +103,34 @@
             }
           },
           "400": {
-              "description": "Empty data",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Something bad happened!"
-                      },
-                      "data": {
-                        "type": "array",
-                        "example": []
-                      }
+            "description": "Empty data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Something bad happened!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
                     }
                   }
                 }
               }
             }
+          }
         }
       }
     },
     "/sheets/{spreadsheet_id}/{sheet_name}": {
       "get": {
-        "tags": [
-          "Sheet"
-        ],
-        "summary": "Get the data from the sheet",
+        "tags": ["Sheet"],
+        "summary": "Get the sheet's data",
         "description": "Get the columns and the data with pagination.",
-        "operationId": "findPetsByTags",
+        "operationId": "getDataBySheetName",
         "parameters": [
           {
             "name": "spreadsheet_id",
@@ -197,7 +191,7 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
@@ -224,25 +218,315 @@
             }
           },
           "400": {
-              "description": "Empty data",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Something bad happened!"
-                      },
-                      "data": {
-                        "type": "array",
-                        "example": []
+            "description": "Empty data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Something bad happened!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Sheet"],
+        "summary": "Append rows",
+        "description": "Add new rows to the sheet.",
+        "operationId": "appendSheetRow",
+        "parameters": [
+          {
+            "name": "spreadsheet_id",
+            "in": "path",
+            "description": "ID from the spreadsheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg"
+            }
+          },
+          {
+            "name": "sheet_name",
+            "in": "path",
+            "description": "Title from the sheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Sheet 1"
+            }
+          },
+          {
+            "name": "column_count",
+            "in": "query",
+            "description": "Maximum column number",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "example": 10
+            }
+          },
+          {
+            "name": "input_options",
+            "in": "query",
+            "description": "Input options value",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "USER_ENTERED",
+              "enum": ["USER_ENTERED", "RAW"]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "example": [{ "name": "Jean", "email": "jean@appleseed.com" }, { "name": "Bunny", "email": "bunny@appleseed.com" }]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UpdateSheetResponse"
                       }
                     }
                   }
                 }
               }
             }
+          },
+          "400": {
+            "description": "Empty data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Something bad happened!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Sheet"],
+        "summary": "Update rows",
+        "description": "Update certain rows inside sheet.",
+        "operationId": "updateSheetRow",
+        "parameters": [
+          {
+            "name": "spreadsheet_id",
+            "in": "path",
+            "description": "ID from the spreadsheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg"
+            }
+          },
+          {
+            "name": "sheet_name",
+            "in": "path",
+            "description": "Title from the sheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Sheet 1"
+            }
+          },
+          {
+            "name": "column_count",
+            "in": "query",
+            "description": "Maximum column number",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "example": 10
+            }
+          },
+          {
+            "name": "input_options",
+            "in": "query",
+            "description": "Input options value",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "USER_ENTERED",
+              "enum": ["USER_ENTERED", "RAW"]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "4": { "email": "john@appleseed.com" },
+                  "1": { "phone": "415-500-7000" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UpdateSheetResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Empty data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Something bad happened!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sheets/{spreadsheet_id}/{sheet_name}/{rows}": {
+      "delete": {
+        "tags": ["Sheet"],
+        "summary": "Remove rows",
+        "description": "Remove certain rows from sheet. Multiple rows using comma separator.",
+        "operationId": "removeSheetRows",
+        "parameters": [
+          {
+            "name": "spreadsheet_id",
+            "in": "path",
+            "description": "ID from the spreadsheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg"
+            }
+          },
+          {
+            "name": "sheet_name",
+            "in": "path",
+            "description": "Title from the sheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Sheet 1"
+            }
+          },
+          {
+            "name": "rows",
+            "in": "path",
+            "description": "Rows to be deleted.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1,2,3"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted_rows": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 3
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Empty data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Something bad happened!"
+                    },
+                    "deleted_rows": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -355,6 +639,34 @@
           "cell": {
             "type": "string",
             "example": "Sheet1!A"
+          }
+        }
+      },
+      "UpdateSheetResponse": {
+        "type": "object",
+        "properties": {
+          "spreadsheetId": {
+            "type": "string",
+            "example": "1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg"
+          },
+          "updatedCells": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "updatedColumns": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "updatedRows": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "updatedRange": {
+            "type": "string",
+            "example": "Sheet1!B4"
           }
         }
       }

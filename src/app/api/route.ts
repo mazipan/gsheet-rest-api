@@ -1,3 +1,3 @@
 export async function GET() {
-  return Response.json({ message: 'Welcome to GSheet Rest API!' });
+  return Response.json({ message: 'Welcome to GSheet Rest API!' })
 }

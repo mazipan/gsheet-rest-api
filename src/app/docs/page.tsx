@@ -1,6 +1,6 @@
 'use client'
 
-import { ApiReferenceReact } from '@scalar/api-reference-react';
+import { ApiReferenceReact } from '@scalar/api-reference-react'
 
 import '@scalar/api-reference-react/style.css'
 

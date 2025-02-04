@@ -13,7 +13,7 @@ Simple yet deployable rest API for your Google Sheet. Turn your Google Sheet int
   - Add people with email from your service account
   - Click "Copy link" button to get the `spreadsheetid` (e.g: If the link is `https://docs.google.com/spreadsheets/d/1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg/edit?usp=sharing` then the ID is `1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg`)
 
-## Run project
+## Development
 
 - Install dependencies
 
@@ -32,6 +32,12 @@ bun run dev
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmazipan%2Fgsheet-rest-api)
 
 Add environment variable `GOOGLE_CREDENTIALS` with your JSON from service account key.
+
+## Limitations and Quota
+
+[Following Google Sheets API documentation](https://developers.google.com/sheets/api/limits). This version of the Google Sheets API has a limit of 500 requests per 100 seconds per project, and 100 requests per 100 seconds per user. Limits for reads and writes are tracked separately. There is no daily usage limit.
+
+Be mindful about this limitation, if you want to use this api as a backend for your frontend!
 
 ## Credits
 
