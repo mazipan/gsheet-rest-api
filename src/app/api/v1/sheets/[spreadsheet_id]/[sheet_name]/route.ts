@@ -7,7 +7,9 @@ import { NextRequest } from 'next/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { spreadsheet_id: string; sheet_name: string } }
+  {
+    params,
+  }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
   const searchParams = request.nextUrl.searchParams
   const offset = searchParams.get('offset')
@@ -57,7 +59,9 @@ export async function GET(
 // --- Update rows
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { spreadsheet_id: string; sheet_name: string } }
+  {
+    params,
+  }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
   const searchParams = request.nextUrl.searchParams
 
@@ -117,7 +121,9 @@ export async function PUT(
 // --- Append rows
 export async function POST(
   request: NextRequest,
-  { params }: { params: { spreadsheet_id: string; sheet_name: string } }
+  {
+    params,
+  }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
   const searchParams = request.nextUrl.searchParams
 

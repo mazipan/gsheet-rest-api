@@ -2,7 +2,7 @@ import { getSheetsBySpreadsheetId } from '@/utils/sheets'
 
 export async function GET(
   _request: Request,
-  { params }: { params: { spreadsheet_id: string } }
+  { params }: { params: Promise<{ spreadsheet_id: string }> }
 ) {
   const { spreadsheet_id } = await params
 

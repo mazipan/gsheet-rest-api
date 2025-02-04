@@ -2,10 +2,16 @@ import { removeSheetRows } from '@/utils/sheets'
 import { NextRequest } from 'next/server'
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   {
     params,
-  }: { params: { spreadsheet_id: string; sheet_name: string; rows: string } }
+  }: {
+    params: Promise<{
+      spreadsheet_id: string
+      sheet_name: string
+      rows: string
+    }>
+  }
 ) {
   const { spreadsheet_id, sheet_name, rows } = await params
   const deletedRows = (rows || '').split(',')
