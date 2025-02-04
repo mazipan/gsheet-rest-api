@@ -24,7 +24,7 @@ body {
   font-family: ui-sans-serif, system-ui, Arial, Helvetica, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 }
 
-.ray-light{
+.blur-bg {
   background-color: #3166b480;
   background: radial-gradient(ellipse closest-side at center, #83dd9e, #3166b480);
 }

@@ -3,7 +3,7 @@ import {
   getDataBySheetName,
   updateSheetRow,
 } from '@/utils/sheets'
-import { headers } from 'next/headers';
+import { headers } from 'next/headers'
 import { NextRequest } from 'next/server'
 
 export async function GET(
