@@ -6,12 +6,13 @@ export async function GET(
   { params }: { params: Promise<{ spreadsheet_id: string }> }
 ) {
   const headersList = await headers()
-  const apiKey = headersList.get('X-Api-Key')
+  const apiKey = headersList.get('x-api-key')
 
   if (!apiKey || apiKey !== process.env.API_KEY) {
+    console.warn(`'Header x-api-key: "${apiKey}" is not valid!'`)
     return Response.json(
       {
-        message: 'Header X-Api-Key is not valid!',
+        message: `'Header x-api-key: "${apiKey}" is not valid!'`,
         data: [],
       },
       {

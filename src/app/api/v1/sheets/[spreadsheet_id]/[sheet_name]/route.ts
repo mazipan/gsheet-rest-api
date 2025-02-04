@@ -13,12 +13,13 @@ export async function GET(
   }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
   const headersList = await headers()
-  const apiKey = headersList.get('X-Api-Key')
+  const apiKey = headersList.get('x-api-key')
 
   if (!apiKey || apiKey !== process.env.API_KEY) {
+    console.warn(`'Header x-api-key: "${apiKey}" is not valid!'`)
     return Response.json(
       {
-        message: 'Header X-Api-Key is not valid!',
+        message: `'Header x-api-key: "${apiKey}" is not valid!'`,
         data: [],
       },
       {
@@ -80,12 +81,13 @@ export async function PUT(
   }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
   const headersList = await headers()
-  const apiKey = headersList.get('X-Api-Key')
+  const apiKey = headersList.get('x-api-key')
 
   if (!apiKey || apiKey !== process.env.API_KEY) {
+    console.warn(`'Header x-api-key: "${apiKey}" is not valid!'`)
     return Response.json(
       {
-        message: 'Header X-Api-Key is not valid!',
+        message: `'Header x-api-key: "${apiKey}" is not valid!'`,
         data: [],
       },
       {
@@ -157,12 +159,13 @@ export async function POST(
   }: { params: Promise<{ spreadsheet_id: string; sheet_name: string }> }
 ) {
   const headersList = await headers()
-  const apiKey = headersList.get('X-Api-Key')
+  const apiKey = headersList.get('x-api-key')
 
   if (!apiKey || apiKey !== process.env.API_KEY) {
+    console.warn(`'Header x-api-key: "${apiKey}" is not valid!'`)
     return Response.json(
       {
-        message: 'Header X-Api-Key is not valid!',
+        message: `'Header x-api-key: "${apiKey}" is not valid!'`,
         data: [],
       },
       {

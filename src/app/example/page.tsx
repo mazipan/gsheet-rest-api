@@ -16,7 +16,7 @@ export default async function Example() {
       tags: ['todos'],
     },
     headers: {
-      'X-Api-Key': process.env.API_KEY || '',
+      'x-api-key': process.env.API_KEY || '',
     },
   })
 

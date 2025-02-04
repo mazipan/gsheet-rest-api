@@ -15,7 +15,7 @@ export async function markAsDone(previousState: boolean, formData: FormData) {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'X-Api-Key': process.env.API_KEY || '',
+      'x-api-key': process.env.API_KEY || '',
     },
     body: JSON.stringify({
       [row as string]: {
@@ -39,7 +39,7 @@ export async function addNewTodo(previousState: boolean, formData: FormData) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Api-Key': process.env.API_KEY || '',
+      'x-api-key': process.env.API_KEY || '',
     },
     body: JSON.stringify({
       data: [
@@ -67,7 +67,7 @@ export async function removeTodo(previousState: boolean, formData: FormData) {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'X-Api-Key': process.env.API_KEY || '',
+      'x-api-key': process.env.API_KEY || '',
     },
   })
 
