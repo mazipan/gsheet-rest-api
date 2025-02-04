@@ -2,7 +2,7 @@
   "openapi": "3.0.4",
   "info": {
     "title": "GSheet Rest API",
-    "description": "Simple yet deployable rest API for your Google Sheet. Turn your Google Sheet into API. \n\n [![GitHub Repo stars](https://img.shields.io/github/stars/mazipan/gsheet-rest-api)](https://github.com/mazipan/gsheet-rest-api) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmazipan%2Fgsheet-rest-api)",
+    "description": "Simple yet deployable rest API for your Google Sheet. Turn your Google Sheet into API. \n\n [![GitHub Repo stars](https://img.shields.io/github/stars/mazipan/gsheet-rest-api)](https://github.com/mazipan/gsheet-rest-api) ![GitHub forks](https://img.shields.io/github/forks/mazipan/gsheet-rest-api) \n\n [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmazipan%2Fgsheet-rest-api)",
     "version": "1.0.0"
   },
   "servers": [
@@ -450,7 +450,94 @@
         }
       }
     },
-    "/sheets/{spreadsheet_id}/{sheet_name}/{rows}": {
+    "/sheets/{spreadsheet_id}/{sheet_name}/{row}": {
+      "get": {
+        "tags": ["Sheet"],
+        "summary": "Get the row data",
+        "description": "Get data in certain row inside sheet.",
+        "operationId": "getSheetDataByRows",
+        "parameters": [
+          {
+            "name": "spreadsheet_id",
+            "in": "path",
+            "description": "ID from the spreadsheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1-Qi5_aizQiNTMRBuqboory9Ba7lyonxCjDCogASdVdg"
+            }
+          },
+          {
+            "name": "sheet_name",
+            "in": "path",
+            "description": "Title from the sheet",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Sheet1"
+            }
+          },
+          {
+            "name": "row",
+            "in": "path",
+            "description": "Row number",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "example": 2
+            }
+          },
+          {
+            "name": "column_count",
+            "in": "query",
+            "description": "Maximum column number",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SheetData"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Empty data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Something bad happened!"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": ["Sheet"],
         "summary": "Remove rows",
@@ -478,9 +565,9 @@
             }
           },
           {
-            "name": "rows",
+            "name": "row",
             "in": "path",
-            "description": "Rows to be deleted.",
+            "description": "Rows to be deleted. Use comma to remove multiple rows.",
             "required": true,
             "schema": {
               "type": "string",

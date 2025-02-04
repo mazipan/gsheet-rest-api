@@ -2,6 +2,8 @@
 
 Simple yet deployable rest API for your Google Sheet. Turn your Google Sheet into API.
 
+- API Doc: [gsheet-rest-api.vercel.app/docs](https://gsheet-rest-api.vercel.app/docs)
+
 ## Setup access
 
 + Enable Google Sheets API + Google Drive API in your Cloud Console

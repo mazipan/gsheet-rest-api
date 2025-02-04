@@ -425,54 +425,46 @@ export async function appendSheetRow(
   }
 }
 
-// // --------------
-// // NOT IMPLEMENTED YET
-// // GET /gsheet/:spreadsheetId/:sheetName/:rowNumber
-// // --------------
-// router.get(
-//   '/:spreadsheetId([a-zA-Z0-9-_]+)/:sheetName/:rowNumber',
-//   async (req, res, next) => {
-//     try {
-//       // Validations
-//       if (!req.params.spreadsheetId)
-//         return utils.throwError('Missing spreadsheetId', 400);
-//       if (!req.params.sheetName)
-//         return utils.throwError('Missing sheetName', 400);
-//       const params = utils.getParams(req.params, [
-//         'spreadsheetId',
-//         'sheetName',
-//         'rowNumber',
-//       ]);
-//       const { rowNumber } = req.params;
+export async function getSheetDataByRows(
+  spreadsheetId: string,
+  sheetName: string,
+  rowNumber: string,
+  options = { columnCount: 10 }
+) {
+  try {
+    const columnCount = options?.columnCount || 10
+    const maxColumn = columnCount ? numberToLetter(Number(columnCount)) : 'EE'
 
-//       const { spreadsheetId, sheetName } = params;
+    const headerRange = `${sheetName}!A1:${maxColumn}1`
+    const dataRange = `${sheetName}!A${rowNumber}:${maxColumn}${rowNumber}`
 
-//       const maxColumn = req.query.columnCount
-//         ? utils.numberToLetter(Number(req.query.columnCount))
-//         : 'EE';
+    const sheetRes = await sheets.spreadsheets.values.batchGet({
+      spreadsheetId,
+      ranges: [headerRange, dataRange],
+    })
 
-//       const headerRange = `${sheetName}!A1:${maxColumn}1`;
-//       const dataRange = `${sheetName}!A${rowNumber}:${maxColumn}${rowNumber}`;
+    if (sheetRes && sheetRes.data && sheetRes.data.valueRanges) {
+      const headerRow = sheetRes.data.valueRanges?.[0]?.values?.[0] || []
 
-//       const sheetRes = await sheets.spreadsheets.values.batchGet({
-//         spreadsheetId,
-//         ranges: [headerRange, dataRange],
-//       });
-//       const headerRow = sheetRes.data.valueRanges[0].values[0];
-//       const rows = sheetRes.data.valueRanges[1].values;
-//       const row = { rowNumber: Number(rowNumber) };
-//       headerRow.forEach((columnName, columnIndex) => {
-//         row[columnName] = utils.detectValues(rows[0][columnIndex]);
-//       });
+      const rows = sheetRes.data.valueRanges[1].values
 
-//       return res.send(row);
-//     } catch (e) {
-//       if (e.response) {
-//         const error = new Error(e.response.data.error.message);
-//         error.status = e.response.data.error.code;
-//         return next(error);
-//       }
-//       return next(e);
-//     }
-//   }
-// );
+      const row: Record<string, unknown> = {
+        _row: Number(rowNumber),
+      }
+
+      headerRow.forEach((columnName: string, columnIndex) => {
+        const val = detectValues(rows?.[0]?.[columnIndex])
+        if (val) {
+          row[columnName] = val
+        }
+      })
+
+      return { data: row }
+    }
+
+    return null
+  } catch (e) {
+    console.error('Got error when invoke getSheetDataByRows', e)
+    return null
+  }
+}

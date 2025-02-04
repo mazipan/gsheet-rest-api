@@ -10,13 +10,15 @@ export default function Home() {
   return (
     <div className="relative grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
       <div className="absolute -z-10 h-screen w-screen max-w-full overflow-hidden min-[2048px]:max-w-[2048px]">
-        <div className="blur-bg absolute -top-[252px] left-[100px] h-[267px] w-[1192px] rotate-[-20deg] rounded-full opacity-100 blur-[48px] md:opacity-40"></div>
-        <div className="blur-bg absolute -top-[200px] left-[240px] h-[276px] w-[1192px] rotate-[-32deg] rounded-full opacity-25 blur-[48px]"></div>
-        <div className="blur-bg absolute -top-[440px] -left-[200px] h-[388px] w-[1758px] rotate-[40deg] rounded-full opacity-80 blur-[48px]"></div>
-        <div className="blur-bg absolute -top-[280px] left-[960px] h-[492px] w-[1192px] rotate-[-32deg] rounded-full opacity-75 blur-[48px]"></div>
+        <div className="blur-bg absolute -top-[252px] left-[100px] h-[267px] w-[1192px] rotate-[-20deg] rounded-full opacity-100 blur-[48px] delay-1000 duration-700 ease-in-out motion-safe:animate-pulse md:opacity-40"></div>
+        <div className="blur-bg absolute -top-[200px] left-[240px] h-[276px] w-[1192px] rotate-[-32deg] rounded-full opacity-25 blur-[48px] delay-1000 duration-500 ease-in-out motion-safe:animate-pulse"></div>
+        <div className="blur-bg absolute -top-[440px] -left-[200px] h-[388px] w-[1758px] rotate-[40deg] rounded-full opacity-80 blur-[48px] delay-700 duration-1000 ease-in-out motion-safe:animate-pulse"></div>
+        <div className="blur-bg absolute -top-[280px] left-[960px] h-[492px] w-[1192px] rotate-[-32deg] rounded-full opacity-75 blur-[48px] delay-500 duration-300 ease-in-out motion-safe:animate-pulse"></div>
       </div>
-      <main className="row-start-2 flex flex-col items-center gap-8 sm:items-start">
-        <h1 className="text-4xl font-extrabold">📑 GSheet Rest API</h1>
+      <main className="row-start-2 flex flex-col items-center gap-16 sm:items-start">
+        <h1 className="self-center text-4xl font-extrabold">
+          📑 GSheet Rest API
+        </h1>
 
         <div className="flex flex-col items-center gap-4 sm:flex-row">
           <a
@@ -39,10 +41,44 @@ export default function Home() {
             Deploy now
           </a>
           <Link
-            className="flex h-10 items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:min-w-44 sm:px-5 sm:text-base dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
+            className="flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-black/[.08] px-4 text-sm transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:min-w-44 sm:px-5 sm:text-base dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
             href="/docs"
           >
-            Documentation
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+              />
+            </svg>
+            Docs
+          </Link>
+          <Link
+            className="flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-black/[.08] px-4 text-sm transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:min-w-44 sm:px-5 sm:text-base dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
+            href="/example"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672ZM12 2.25V4.5m5.834.166-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243-1.59-1.59"
+              />
+            </svg>
+            Example
           </Link>
         </div>
       </main>
