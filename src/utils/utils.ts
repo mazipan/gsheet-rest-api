@@ -1,3 +1,13 @@
+/**
+ * Credits to:
+ * - https://github.com/melalj
+ *
+ * Most of the code in this file are coming from
+ * https://github.com/melalj/gsheet-api/blob/master/src/utils.js
+ *
+ * Adding small typings and ignore the rest
+ */
+
 export function numberToLetter(num: number) {
   let ret = ''
   for (let a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
@@ -10,13 +20,9 @@ export function numberToLetter(num: number) {
 
 export function detectValues(val: string) {
   if (val === '') return null
-
   if (val === 'TRUE') return true
-
   if (val === 'FALSE') return false
-
   if (/^\d+\.\d+$/.test(val)) return parseFloat(val)
-
   if (/^\d+$/.test(val)) return parseInt(val, 10)
 
   return val

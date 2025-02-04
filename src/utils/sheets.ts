@@ -1,3 +1,14 @@
+/**
+ * Credits to:
+ * - https://github.com/melalj
+ *
+ * Most of the code in this file are coming from
+ * https://github.com/melalj/gsheet-api/blob/master/src/api/gsheet.js
+ *
+ * Refine the typing to have better intellisense
+ * Fix some deprecated parameter when passing to newer "sheets_v4" api
+ */
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { google, type sheets_v4 } from 'googleapis'
 import { detectValues, numberToLetter } from './utils'
@@ -415,6 +426,7 @@ export async function appendSheetRow(
 }
 
 // // --------------
+// // NOT IMPLEMENTED YET
 // // GET /gsheet/:spreadsheetId/:sheetName/:rowNumber
 // // --------------
 // router.get(
