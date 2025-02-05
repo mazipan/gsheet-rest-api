@@ -18,6 +18,7 @@ export default function References() {
           hideModels: true,
           hideClientButton: true,
           authentication: {
+            preferredSecurityScheme: 'x-api-key',
             apiKey: {
               token: 'YOUR_SECRET_TOKEN',
             },
