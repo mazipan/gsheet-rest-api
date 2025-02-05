@@ -1,6 +1,4 @@
-.md {
-  :global(.introduction-description .markdown img) {
-    display: inline-flex;
-    margin: 3px 0;
-  }
+.md :global(.introduction-description .markdown img) {
+  display: inline-flex;
+  margin: 3px 0;
 }
