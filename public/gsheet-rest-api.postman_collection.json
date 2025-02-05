@@ -1,0 +1,1099 @@
+{
+	"info": {
+		"_postman_id": "09eaf3d9-2b4f-4b1f-8463-1e3edecb928d",
+		"name": "GSheet Rest API",
+		"description": "Simple yet deployable rest API for your Google Sheet. Turn your Google Sheet into API. \n\n [![GitHub Repo stars](https://img.shields.io/github/stars/mazipan/gsheet-rest-api)](https://github.com/mazipan/gsheet-rest-api) ![GitHub forks](https://img.shields.io/github/forks/mazipan/gsheet-rest-api) \n\n [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmazipan%2Fgsheet-rest-api)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "409435"
+	},
+	"item": [
+		{
+			"name": "sheets",
+			"item": [
+				{
+					"name": "{spreadsheet_id}",
+					"item": [
+						{
+							"name": "{sheet_name}",
+							"item": [
+								{
+									"name": "{row}",
+									"item": [
+										{
+											"name": "Get the row data",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name/:row?column_count=10",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"sheets",
+														":spreadsheet_id",
+														":sheet_name",
+														":row"
+													],
+													"query": [
+														{
+															"key": "column_count",
+															"value": "10",
+															"description": "Maximum column number"
+														}
+													],
+													"variable": [
+														{
+															"key": "spreadsheet_id",
+															"value": "<string>",
+															"description": "(Required) ID from the spreadsheet"
+														},
+														{
+															"key": "sheet_name",
+															"value": "<string>",
+															"description": "(Required) Title from the sheet"
+														},
+														{
+															"key": "row",
+															"value": "<integer>",
+															"description": "(Required) Row number"
+														}
+													]
+												},
+												"description": "Get data in certain row inside sheet."
+											},
+											"response": [
+												{
+													"name": "Successful operation",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name/:row?column_count=10",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"sheets",
+																":spreadsheet_id",
+																":sheet_name",
+																":row"
+															],
+															"query": [
+																{
+																	"key": "column_count",
+																	"value": "10",
+																	"description": "Maximum column number"
+																}
+															],
+															"variable": [
+																{
+																	"key": "spreadsheet_id"
+																},
+																{
+																	"key": "sheet_name"
+																},
+																{
+																	"key": "row"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"data\": {\n    \"_row\": \"<integer>\"\n  }\n}"
+												},
+												{
+													"name": "Empty data",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name/:row?column_count=10",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"sheets",
+																":spreadsheet_id",
+																":sheet_name",
+																":row"
+															],
+															"query": [
+																{
+																	"key": "column_count",
+																	"value": "10",
+																	"description": "Maximum column number"
+																}
+															],
+															"variable": [
+																{
+																	"key": "spreadsheet_id"
+																},
+																{
+																	"key": "sheet_name"
+																},
+																{
+																	"key": "row"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"message\": \"<string>\",\n  \"data\": {}\n}"
+												}
+											]
+										},
+										{
+											"name": "Remove rows",
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name/:row",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"sheets",
+														":spreadsheet_id",
+														":sheet_name",
+														":row"
+													],
+													"variable": [
+														{
+															"key": "spreadsheet_id",
+															"value": "<string>",
+															"description": "(Required) ID from the spreadsheet"
+														},
+														{
+															"key": "sheet_name",
+															"value": "<string>",
+															"description": "(Required) Title from the sheet"
+														},
+														{
+															"key": "row",
+															"value": "<string>",
+															"description": "(Required) Rows to be deleted. Use comma to remove multiple rows."
+														}
+													]
+												},
+												"description": "Remove certain rows from sheet. Multiple rows using comma separator."
+											},
+											"response": [
+												{
+													"name": "Successful operation",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name/:row",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"sheets",
+																":spreadsheet_id",
+																":sheet_name",
+																":row"
+															],
+															"variable": [
+																{
+																	"key": "spreadsheet_id"
+																},
+																{
+																	"key": "sheet_name"
+																},
+																{
+																	"key": "row"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"deleted_rows\": \"<integer>\"\n}"
+												},
+												{
+													"name": "Empty data",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name/:row",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"sheets",
+																":spreadsheet_id",
+																":sheet_name",
+																":row"
+															],
+															"variable": [
+																{
+																	"key": "spreadsheet_id"
+																},
+																{
+																	"key": "sheet_name"
+																},
+																{
+																	"key": "row"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"message\": \"<string>\",\n  \"deleted_rows\": \"<integer>\"\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Get the sheet's data",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&per_page=100&column_count=10",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"sheets",
+												":spreadsheet_id",
+												":sheet_name"
+											],
+											"query": [
+												{
+													"key": "offset",
+													"value": "2",
+													"description": "Pagination offset"
+												},
+												{
+													"key": "per_page",
+													"value": "100",
+													"description": "Pagination page size"
+												},
+												{
+													"key": "column_count",
+													"value": "10",
+													"description": "Maximum column number"
+												}
+											],
+											"variable": [
+												{
+													"key": "spreadsheet_id",
+													"value": "<string>",
+													"description": "(Required) ID from the spreadsheet"
+												},
+												{
+													"key": "sheet_name",
+													"value": "<string>",
+													"description": "(Required) Title from the sheet"
+												}
+											]
+										},
+										"description": "Get the columns and the data with pagination."
+									},
+									"response": [
+										{
+											"name": "Successful operation",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&per_page=100&column_count=10",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"sheets",
+														":spreadsheet_id",
+														":sheet_name"
+													],
+													"query": [
+														{
+															"key": "offset",
+															"value": "2",
+															"description": "Pagination offset"
+														},
+														{
+															"key": "per_page",
+															"value": "100",
+															"description": "Pagination page size"
+														},
+														{
+															"key": "column_count",
+															"value": "10",
+															"description": "Maximum column number"
+														}
+													],
+													"variable": [
+														{
+															"key": "spreadsheet_id"
+														},
+														{
+															"key": "sheet_name"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"data\": [\n    {\n      \"_row\": \"<integer>\"\n    },\n    {\n      \"_row\": \"<integer>\"\n    }\n  ],\n  \"pagination\": {\n    \"perPage\": \"<integer>\",\n    \"cellRange\": \"<string>\",\n    \"offset\": \"<integer>\",\n    \"nextOffset\": \"<integer>\",\n    \"totalItems\": \"<integer>\",\n    \"haveNext\": \"<boolean>\"\n  },\n  \"columns\": [\n    {\n      \"title\": \"<string>\",\n      \"cell\": \"<string>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"cell\": \"<string>\"\n    }\n  ]\n}"
+										},
+										{
+											"name": "Empty data",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&per_page=100&column_count=10",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"sheets",
+														":spreadsheet_id",
+														":sheet_name"
+													],
+													"query": [
+														{
+															"key": "offset",
+															"value": "2",
+															"description": "Pagination offset"
+														},
+														{
+															"key": "per_page",
+															"value": "100",
+															"description": "Pagination page size"
+														},
+														{
+															"key": "column_count",
+															"value": "10",
+															"description": "Maximum column number"
+														}
+													],
+													"variable": [
+														{
+															"key": "spreadsheet_id"
+														},
+														{
+															"key": "sheet_name"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"data\": \"<array>\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Append rows",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"data\": \"<array>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?column_count=10&input_options=USER_ENTERED",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"sheets",
+												":spreadsheet_id",
+												":sheet_name"
+											],
+											"query": [
+												{
+													"key": "column_count",
+													"value": "10",
+													"description": "Maximum column number"
+												},
+												{
+													"key": "input_options",
+													"value": "USER_ENTERED",
+													"description": "Input options value"
+												}
+											],
+											"variable": [
+												{
+													"key": "spreadsheet_id",
+													"value": "<string>",
+													"description": "(Required) ID from the spreadsheet"
+												},
+												{
+													"key": "sheet_name",
+													"value": "<string>",
+													"description": "(Required) Title from the sheet"
+												}
+											]
+										},
+										"description": "Add new rows to the sheet."
+									},
+									"response": [
+										{
+											"name": "Successful operation",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"data\": \"<array>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?column_count=10&input_options=USER_ENTERED",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"sheets",
+														":spreadsheet_id",
+														":sheet_name"
+													],
+													"query": [
+														{
+															"key": "column_count",
+															"value": "10",
+															"description": "Maximum column number"
+														},
+														{
+															"key": "input_options",
+															"value": "USER_ENTERED",
+															"description": "Input options value"
+														}
+													],
+													"variable": [
+														{
+															"key": "spreadsheet_id"
+														},
+														{
+															"key": "sheet_name"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"data\": [\n    {\n      \"spreadsheetId\": \"<string>\",\n      \"updatedCells\": \"<integer>\",\n      \"updatedColumns\": \"<integer>\",\n      \"updatedRows\": \"<integer>\",\n      \"updatedRange\": \"<string>\"\n    },\n    {\n      \"spreadsheetId\": \"<string>\",\n      \"updatedCells\": \"<integer>\",\n      \"updatedColumns\": \"<integer>\",\n      \"updatedRows\": \"<integer>\",\n      \"updatedRange\": \"<string>\"\n    }\n  ]\n}"
+										},
+										{
+											"name": "Empty data",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"data\": \"<array>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?column_count=10&input_options=USER_ENTERED",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"sheets",
+														":spreadsheet_id",
+														":sheet_name"
+													],
+													"query": [
+														{
+															"key": "column_count",
+															"value": "10",
+															"description": "Maximum column number"
+														},
+														{
+															"key": "input_options",
+															"value": "USER_ENTERED",
+															"description": "Input options value"
+														}
+													],
+													"variable": [
+														{
+															"key": "spreadsheet_id"
+														},
+														{
+															"key": "sheet_name"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"data\": \"<array>\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update rows",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?column_count=10&input_options=USER_ENTERED",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"sheets",
+												":spreadsheet_id",
+												":sheet_name"
+											],
+											"query": [
+												{
+													"key": "column_count",
+													"value": "10",
+													"description": "Maximum column number"
+												},
+												{
+													"key": "input_options",
+													"value": "USER_ENTERED",
+													"description": "Input options value"
+												}
+											],
+											"variable": [
+												{
+													"key": "spreadsheet_id",
+													"value": "<string>",
+													"description": "(Required) ID from the spreadsheet"
+												},
+												{
+													"key": "sheet_name",
+													"value": "<string>",
+													"description": "(Required) Title from the sheet"
+												}
+											]
+										},
+										"description": "Update certain rows inside sheet."
+									},
+									"response": [
+										{
+											"name": "Successful operation",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?column_count=10&input_options=USER_ENTERED",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"sheets",
+														":spreadsheet_id",
+														":sheet_name"
+													],
+													"query": [
+														{
+															"key": "column_count",
+															"value": "10",
+															"description": "Maximum column number"
+														},
+														{
+															"key": "input_options",
+															"value": "USER_ENTERED",
+															"description": "Input options value"
+														}
+													],
+													"variable": [
+														{
+															"key": "spreadsheet_id"
+														},
+														{
+															"key": "sheet_name"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"data\": [\n    {\n      \"spreadsheetId\": \"<string>\",\n      \"updatedCells\": \"<integer>\",\n      \"updatedColumns\": \"<integer>\",\n      \"updatedRows\": \"<integer>\",\n      \"updatedRange\": \"<string>\"\n    },\n    {\n      \"spreadsheetId\": \"<string>\",\n      \"updatedCells\": \"<integer>\",\n      \"updatedColumns\": \"<integer>\",\n      \"updatedRows\": \"<integer>\",\n      \"updatedRange\": \"<string>\"\n    }\n  ]\n}"
+										},
+										{
+											"name": "Empty data",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?column_count=10&input_options=USER_ENTERED",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"sheets",
+														":spreadsheet_id",
+														":sheet_name"
+													],
+													"query": [
+														{
+															"key": "column_count",
+															"value": "10",
+															"description": "Maximum column number"
+														},
+														{
+															"key": "input_options",
+															"value": "USER_ENTERED",
+															"description": "Input options value"
+														}
+													],
+													"variable": [
+														{
+															"key": "spreadsheet_id"
+														},
+														{
+															"key": "sheet_name"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"data\": \"<array>\"\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Get the sheet's info",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/sheets/:spreadsheet_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sheets",
+										":spreadsheet_id"
+									],
+									"variable": [
+										{
+											"key": "spreadsheet_id",
+											"value": "<string>",
+											"description": "(Required) ID from the spreadsheet"
+										}
+									]
+								},
+								"description": "Get the sheets available by using spreadsheet id"
+							},
+							"response": [
+								{
+									"name": "Successful operation",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/sheets/:spreadsheet_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"sheets",
+												":spreadsheet_id"
+											],
+											"variable": [
+												{
+													"key": "spreadsheet_id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"data\": [\n    {\n      \"title\": \"<string>\",\n      \"index\": \"<integer>\",\n      \"sheetId\": \"<integer>\",\n      \"rowCount\": \"<integer>\",\n      \"columnCount\": \"<integer>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"index\": \"<integer>\",\n      \"sheetId\": \"<integer>\",\n      \"rowCount\": \"<integer>\",\n      \"columnCount\": \"<integer>\"\n    }\n  ]\n}"
+								},
+								{
+									"name": "Empty data",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/sheets/:spreadsheet_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"sheets",
+												":spreadsheet_id"
+											],
+											"variable": [
+												{
+													"key": "spreadsheet_id"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\",\n  \"data\": \"<array>\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "List all files",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/sheets",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sheets"
+							]
+						},
+						"description": "List down all the spreadsheets can be accessed by the service account."
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/sheets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sheets"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"modifiedTime\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"modifiedTime\": \"<dateTime>\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "Empty data",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/sheets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sheets"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"data\": \"<array>\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1"
+		}
+	]
+}

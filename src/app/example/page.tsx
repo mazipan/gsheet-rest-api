@@ -1,12 +1,8 @@
 import Link from 'next/link'
 import { TodoItem } from './TodoItem'
 import { AddNewTodo } from './AddNewTodo'
-import {
-  ArrowLeftIcon,
-  BookOpenIcon,
-  CubeIcon,
-  ListBulletIcon,
-} from '@heroicons/react/16/solid'
+import { ArrowLeftIcon, ListBulletIcon } from '@heroicons/react/16/solid'
+import { BookOpenIcon, CubeIcon } from '@heroicons/react/24/outline'
 import { ThemeSwitcher } from '@/components/theme-switcher'
 import { notFound } from 'next/navigation'
 

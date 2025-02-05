@@ -1,21 +1,26 @@
 'use client'
 
 import { ApiReferenceReact } from '@scalar/api-reference-react'
+import styles from './md.module.css'
+import clsx from 'clsx'
 
-import '@scalar/api-reference-react/style.css'
+// import '@scalar/api-reference-react/style.css'
 
 export default function References() {
   return (
-    <div className="group docs">
+    <div className={clsx('group docs', styles.md)}>
       <ApiReferenceReact
         configuration={{
           spec: {
             url: '/openapi.json',
           },
-          customCss: `.introduction-description .markdown img { display: inline-flex; margin: 3px 0; }`,
-          defaultHttpClient: {
-            targetKey: 'js',
-            clientKey: 'fetch',
+          hideDownloadButton: true,
+          hideModels: true,
+          hideClientButton: true,
+          authentication: {
+            apiKey: {
+              token: 'YOUR_SECRET_TOKEN',
+            },
           },
         }}
       />
