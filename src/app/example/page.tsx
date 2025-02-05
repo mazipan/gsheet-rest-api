@@ -8,6 +8,7 @@ import {
   ListBulletIcon,
 } from '@heroicons/react/16/solid'
 import { ThemeSwitcher } from '@/components/theme-switcher'
+import { notFound } from 'next/navigation'
 
 const SPREADSHEET_ID = '1OPctiEOSqDXEW040kGEVzDc8crA6Da7Gb36ukAdNjkE'
 const SHEET_NAME = 'Sheet1'
@@ -27,17 +28,25 @@ type TodosResponse = {
   }
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function Example() {
   const apiUrl = `${process.env.BASE_URL}/api/v1/sheets/${SPREADSHEET_ID}/${SHEET_NAME}`
 
   const res = await fetch(apiUrl, {
+    cache: 'force-cache',
     next: {
       tags: ['todos'],
+      revalidate: 3600,
     },
     headers: {
       'x-api-key': process.env.API_KEY || '',
     },
   })
+
+  if (!res.ok) {
+    notFound()
+  }
 
   const todosResponse: TodosResponse = await res.json()
 

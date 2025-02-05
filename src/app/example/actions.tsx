@@ -95,7 +95,7 @@ function delay(time: number) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function refreshCache(__previousState: boolean): Promise<boolean> {
-  await delay(2000)
+  await delay(500)
   revalidatePath('/example')
   revalidateTag('todos')
 
