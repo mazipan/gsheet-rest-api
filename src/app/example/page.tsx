@@ -1,12 +1,31 @@
 import Link from 'next/link'
 import { TodoItem } from './TodoItem'
 import { AddNewTodo } from './AddNewTodo'
-import Image from 'next/image'
+import {
+  ArrowLeftIcon,
+  BookOpenIcon,
+  CubeIcon,
+  ListBulletIcon,
+} from '@heroicons/react/16/solid'
+import { ThemeSwitcher } from '@/components/theme-switcher'
 
 const SPREADSHEET_ID = '1OPctiEOSqDXEW040kGEVzDc8crA6Da7Gb36ukAdNjkE'
 const SHEET_NAME = 'Sheet1'
 
 type Todo = { _row: number; ACTIVITY: string; STATUS: boolean }
+
+type TodosResponse = {
+  columns: { title: string; cell: string }[]
+  data: Todo[]
+  pagination: {
+    perPage: number
+    cellRange: string
+    offset: number
+    nextOffset: number
+    totalItems: number
+    haveNext: boolean
+  }
+}
 
 export default async function Example() {
   const apiUrl = `${process.env.BASE_URL}/api/v1/sheets/${SPREADSHEET_ID}/${SHEET_NAME}`
@@ -20,55 +39,53 @@ export default async function Example() {
     },
   })
 
-  const todosResponse = await res.json()
+  const todosResponse: TodosResponse = await res.json()
 
   return (
-    <article className="container mx-auto space-y-4 py-8">
+    <article className="container mx-auto space-y-4 px-4 py-8">
       <nav className="flex items-center gap-2">
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 hover:underline focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+          className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 hover:underline focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-4"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-            />
-          </svg>
+          <ArrowLeftIcon className="size-4" />
           Back to Home
         </Link>
         <Link
           href="/docs"
-          className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 hover:underline focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+          className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 hover:underline focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-4"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
-            />
-          </svg>
+          <BookOpenIcon className="size-4" />
           Documentation
         </Link>
       </nav>
 
       <section className="space-y-4">
-        <h1 className="text-3xl font-extrabold">Example: Todo List</h1>
+        <h1 className="flex items-center gap-2 text-3xl font-extrabold">
+          <ListBulletIcon className="size-8" />
+          Todo List App
+        </h1>
+
+        <p className="text-base text-gray-500 dark:text-gray-400">
+          This app was developed to demonstrated how to use{' '}
+          <Link className="text-blue-600 underline dark:text-blue-400" href="/">
+            gsheet-rest-api
+          </Link>{' '}
+          to build your next hobby project.
+          <br />
+          <span>
+            Check the complete code for this example in{' '}
+            <a
+              href="https://github.com/mazipan/gsheet-rest-api/tree/master/src/app/example"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline dark:text-blue-400"
+            >
+              src/app/example
+            </a>
+            .
+          </span>
+        </p>
 
         <AddNewTodo />
 
@@ -81,22 +98,47 @@ export default async function Example() {
             )
           })}
         </ul>
+
+        <div className="flex flex-wrap gap-2">
+          <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+            Total: {todosResponse?.pagination?.totalItems}
+          </span>
+          <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+            Has Next? {todosResponse?.pagination?.haveNext?.toString()}
+          </span>
+          <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+            Cell Range: {todosResponse?.pagination?.cellRange}
+          </span>
+          <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+            Offset: {todosResponse?.pagination?.offset}
+          </span>
+          <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+            Next Offset: {todosResponse?.pagination?.nextOffset}
+          </span>
+        </div>
       </section>
 
+      {/* <div className="!mt-8 space-y-4">
+        <h2 className="text-3xl font-extrabold">Google Sheet iFrame</h2>
+        <p className="text-base text-gray-400">
+          This is the Google Sheet iframe that shows the exact sheet we used.
+          You can use it to compare the data with the list above.
+        </p>
+        <iframe
+          className="min-h-[400px] w-full"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQM_q37tvgEvXoYmXdkvY7b0EvyNrr0dQNpDg0QY5-gIO_anrMaIwD57W-juPK1ANuadJLPpBpREBzN/pubhtml?widget=true&amp;headers=false"
+        ></iframe>
+      </div> */}
+
       <footer className="row-start-3 mt-16 flex flex-wrap items-center justify-center gap-6">
+        <ThemeSwitcher />
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://github.com/mazipan/gsheet-rest-api"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
+          <CubeIcon className="size-5" />
           Go to repository →
         </a>
       </footer>

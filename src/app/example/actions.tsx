@@ -6,7 +6,10 @@ import { redirect } from 'next/navigation'
 const SPREADSHEET_ID = '1OPctiEOSqDXEW040kGEVzDc8crA6Da7Gb36ukAdNjkE'
 const SHEET_NAME = 'Sheet1'
 
-export async function markAsDone(previousState: boolean, formData: FormData) {
+export async function markAsDone(
+  _previousState: boolean,
+  formData: FormData
+): Promise<boolean> {
   const apiUrl = `${process.env.BASE_URL}/api/v1/sheets/${SPREADSHEET_ID}/${SHEET_NAME}`
 
   const row = formData.get('row')
@@ -28,9 +31,13 @@ export async function markAsDone(previousState: boolean, formData: FormData) {
 
   revalidatePath('/example')
   revalidateTag('todos')
+  return true
 }
 
-export async function addNewTodo(previousState: boolean, formData: FormData) {
+export async function addNewTodo(
+  _previousState: boolean,
+  formData: FormData
+): Promise<boolean> {
   const apiUrl = `${process.env.BASE_URL}/api/v1/sheets/${SPREADSHEET_ID}/${SHEET_NAME}`
 
   const activity = formData.get('activity')
@@ -58,7 +65,10 @@ export async function addNewTodo(previousState: boolean, formData: FormData) {
   redirect('/example')
 }
 
-export async function removeTodo(previousState: boolean, formData: FormData) {
+export async function removeTodo(
+  _previousState: boolean,
+  formData: FormData
+): Promise<boolean> {
   const row = formData.get('row')
 
   const apiUrl = `${process.env.BASE_URL}/api/v1/sheets/${SPREADSHEET_ID}/${SHEET_NAME}/${row}`
@@ -75,4 +85,19 @@ export async function removeTodo(previousState: boolean, formData: FormData) {
 
   revalidatePath('/example')
   revalidateTag('todos')
+
+  return true
+}
+
+function delay(time: number) {
+  return new Promise((resolve) => setTimeout(resolve, time))
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function refreshCache(__previousState: boolean): Promise<boolean> {
+  await delay(2000)
+  revalidatePath('/example')
+  revalidateTag('todos')
+
+  return true
 }

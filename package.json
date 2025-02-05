@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@scalar/api-reference-react": "^0.4.22",
     "@scalar/nextjs-api-reference": "^0.5.5",
     "ajv": "^8.17.1",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "googleapis": "^144.0.0",
     "next": "15.1.6",
