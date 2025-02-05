@@ -2,7 +2,7 @@
   "openapi": "3.0.4",
   "info": {
     "title": "GSheet Rest API",
-    "description": "[openapi.json](/openapi.json) • [postman.collection](/gsheet-rest-api.postman_collection.json) \n\nSimple yet deployable rest API for your Google Sheet. Turn your Google Sheet into API. \n\n [![GitHub Repo stars](https://img.shields.io/github/stars/mazipan/gsheet-rest-api)](https://github.com/mazipan/gsheet-rest-api) ![GitHub forks](https://img.shields.io/github/forks/mazipan/gsheet-rest-api) \n\n [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmazipan%2Fgsheet-rest-api)",
+    "description": "[Home](/) • [Example](/example) • [Open API](/openapi.json) • [Postman](/gsheet-rest-api.postman_collection.json) \n\nEffortless REST API for your Google Sheet. Instantly turn your Google Sheet into a powerful API. \n\n [![GitHub Repo stars](https://img.shields.io/github/stars/mazipan/gsheet-rest-api)](https://github.com/mazipan/gsheet-rest-api) ![GitHub forks](https://img.shields.io/github/forks/mazipan/gsheet-rest-api) \n\n [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmazipan%2Fgsheet-rest-api)",
     "version": "1.0.0"
   },
   "servers": [
