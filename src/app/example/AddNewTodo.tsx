@@ -19,7 +19,7 @@ export function AddNewTodo() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
+      <form className="flex items-center gap-2">
         <button
           type="button"
           role="button"
@@ -31,7 +31,7 @@ export function AddNewTodo() {
           <PlusIcon className="size-4" /> Add new item
         </button>
         <button
-          type="button"
+          type="submit"
           role="button"
           formAction={formActionRefreshCache}
           disabled={pendingRefresh}
@@ -44,7 +44,7 @@ export function AddNewTodo() {
           )}
           Refresh cache
         </button>
-      </div>
+      </form>
       {showForm && (
         <form className="max-w-sm space-y-2">
           <div className="mb-5">
