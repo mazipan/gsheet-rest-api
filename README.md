@@ -2,7 +2,9 @@
 
 Effortless REST API for your Google Sheet. Instantly turn your Google Sheet into a powerful API.
 
+- Home: [gsheet-rest-api.vercel.app](https://gsheet-rest-api.vercel.app/)
 - API Doc: [gsheet-rest-api.vercel.app/docs](https://gsheet-rest-api.vercel.app/docs)
+- Example App: [gsheet-rest-api.vercel.app/example](https://gsheet-rest-api.vercel.app/example)
 
 ## Setup access
 
