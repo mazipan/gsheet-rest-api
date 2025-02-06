@@ -1,7 +1,8 @@
 import { getAllFileList } from '@/utils/sheets'
 import { headers } from 'next/headers'
+import { NextRequest } from 'next/server'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const headersList = await headers()
   const apiKey = headersList.get('x-api-key')
 
@@ -11,6 +12,7 @@ export async function GET() {
       {
         message: `'Header x-api-key: "${apiKey}" is not valid!'`,
         data: [],
+        next_token: '',
       },
       {
         status: 401,
@@ -18,18 +20,24 @@ export async function GET() {
     )
   }
 
-  const res = await getAllFileList()
+  const searchParams = request.nextUrl.searchParams
+  const limit = searchParams.get('limit') || '10'
+  const nextToken = searchParams.get('next_token') || ''
 
-  if (res && res.length > 0) {
-    return Response.json({
-      data: res,
-    })
+  const res = await getAllFileList({
+    limit: limit ? parseInt(limit, 10) : 10,
+    nextToken,
+  })
+
+  if (res) {
+    return Response.json(res)
   } else {
     return Response.json(
       {
         message:
           'Can not retrieve any files. Make sure to give access to the service account.',
         data: [],
+        next_token: '',
       },
       {
         status: 400,

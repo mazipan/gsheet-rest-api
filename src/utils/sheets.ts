@@ -30,7 +30,7 @@ const auth = new google.auth.JWT({
 const drive = google.drive({ version: 'v3', auth })
 const sheets = google.sheets({ version: 'v4', auth })
 
-export type GetAllFileListResponse = {
+export type FileData = {
   id: string
   name: string
   /**
@@ -39,19 +39,36 @@ export type GetAllFileListResponse = {
   modifiedTime: string
 }
 
-export async function getAllFileList(): Promise<GetAllFileListResponse[]> {
+export type GetSpreadsheetOptions = {
+  limit?: number
+  nextToken?: string
+}
+
+export async function getAllFileList(
+  options: GetSpreadsheetOptions = { limit: 10, nextToken: '' }
+): Promise<{
+  next_token: string
+  data: FileData[] | null
+}> {
   try {
     const driveRes = await drive.files.list({
       q: "trashed = false and mimeType = 'application/vnd.google-apps.spreadsheet'",
       fields: 'files(id, name, modifiedTime)',
       spaces: 'drive',
-      pageSize: 10,
+      pageSize: options.limit,
+      pageToken: options.nextToken ? undefined : options.nextToken,
     })
 
-    return driveRes.data.files as GetAllFileListResponse[]
+    return {
+      next_token: driveRes.data.nextPageToken || '',
+      data: (driveRes.data.files || []) as FileData[],
+    }
   } catch (e) {
     console.error('Got error when invoke getAllFileList', e)
-    return []
+    return {
+      next_token: '',
+      data: null,
+    }
   }
 }
 

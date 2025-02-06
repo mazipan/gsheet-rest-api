@@ -8,8 +8,8 @@ Effortless REST API for your Google Sheet. Instantly turn your Google Sheet into
 
 ## Setup access
 
-+ Enable Google Sheets API + Google Drive API in your Cloud Console
-+ Create new service account
++ Enable [Google Sheets API](https://console.developers.google.com/apis/api/sheets.googleapis.com/overview) + [Google Drive API](https://console.developers.google.com/apis/api/drive.googleapis.com/overview) in your Cloud Console
++ Create new [service account](https://console.cloud.google.com/iam-admin/serviceaccounts)
 + Add new keys in your service account
   - Download the JSON file, and put it in the `.env.local`. [Read this article](https://dev.to/vvo/how-to-add-firebase-service-account-json-files-to-vercel-ph5)
 + Grant your service account access to the speadsheet

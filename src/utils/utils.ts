@@ -8,14 +8,26 @@
  * Adding small typings and ignore the rest
  */
 
+const START_ASCII_A = 65 // A -> Z is 65 to 90. Read: https://www.ibm.com/docs/en/sdse/6.4.0?topic=configuration-ascii-characters-from-33-126
+
+const MAX_LETTER = 26
+
 export function numberToLetter(num: number) {
-  let ret = ''
-  for (let a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    ret = String.fromCharCode(parseInt((num % b) / a, 10) + 65) + ret
+  let result = ''
+  let x = 1
+  let y = MAX_LETTER
+  let left = num - x
+
+  while (left >= 0) {
+    const curr = (left % y) / x
+    result = String.fromCharCode(curr + START_ASCII_A) + result
+
+    x = y
+    y *= MAX_LETTER
+    left -= y
   }
-  return ret
+
+  return result
 }
 
 export function detectValues(val: string) {
