@@ -15,12 +15,12 @@ type TodosResponse = {
   columns: { title: string; cell: string }[]
   data: Todo[]
   pagination: {
-    perPage: number
-    cellRange: string
+    limit: number
+    cell_range: string
     offset: number
-    nextOffset: number
-    totalItems: number
-    haveNext: boolean
+    next_offset: number
+    total: number
+    hasNext: boolean
   }
 }
 
@@ -52,7 +52,7 @@ export default async function Example() {
         <Link
           prefetch={false}
           href="/"
-          className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 hover:underline focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+          className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
         >
           <ArrowLeftIcon className="size-4" />
           Home
@@ -60,7 +60,7 @@ export default async function Example() {
         <Link
           prefetch={false}
           href="/docs"
-          className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 hover:underline focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+          className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
         >
           <BookOpenIcon className="size-4" />
           Docs
@@ -108,19 +108,19 @@ export default async function Example() {
 
         <div className="flex flex-wrap gap-2">
           <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-            Total: {todosResponse?.pagination?.totalItems}
+            Total: {todosResponse?.pagination?.total}
           </span>
           <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-            Has Next? {todosResponse?.pagination?.haveNext?.toString()}
+            Has Next? {todosResponse?.pagination?.hasNext?.toString()}
           </span>
           <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-            Cell Range: {todosResponse?.pagination?.cellRange}
+            Cell Range: {todosResponse?.pagination?.cell_range}
           </span>
           <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
             Offset: {todosResponse?.pagination?.offset}
           </span>
           <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-            Next Offset: {todosResponse?.pagination?.nextOffset}
+            Next Offset: {todosResponse?.pagination?.next_offset}
           </span>
         </div>
       </section>

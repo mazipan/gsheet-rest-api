@@ -175,7 +175,7 @@
             }
           },
           {
-            "name": "per_page",
+            "name": "limit",
             "in": "query",
             "description": "Pagination page size",
             "required": false,
@@ -724,12 +724,12 @@
       "SheetPagination": {
         "type": "object",
         "properties": {
-          "perPage": {
+          "limit": {
             "type": "integer",
             "format": "int32",
             "example": 20
           },
-          "cellRange": {
+          "cell_range": {
             "type": "string",
             "example": "Sheet1!A2:J101"
           },
@@ -738,17 +738,17 @@
             "format": "int32",
             "example": 0
           },
-          "nextOffset": {
+          "next_offset": {
             "type": "integer",
             "format": "int32",
             "example": 21
           },
-          "totalItems": {
+          "total": {
             "type": "integer",
             "format": "int32",
             "example": 100
           },
-          "haveNext": {
+          "hasNext": {
             "type": "boolean"
           }
         }

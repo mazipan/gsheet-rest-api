@@ -30,7 +30,7 @@ export async function GET(
 
   const searchParams = request.nextUrl.searchParams
   const offset = searchParams.get('offset')
-  const perPage = searchParams.get('per_page')
+  const limit = searchParams.get('limit')
   const columnCount = searchParams.get('column_count')
 
   const { spreadsheet_id, sheet_name } = await params
@@ -51,7 +51,7 @@ export async function GET(
 
   const res = await getDataBySheetName(spreadsheet_id, sheet_name, {
     offset: offset ? parseInt(offset, 10) : 2,
-    perPage: perPage ? parseInt(perPage, 10) : 100,
+    limit: limit ? parseInt(limit, 10) : 100,
     columnCount: columnCount ? parseInt(columnCount, 10) : 10,
   })
 

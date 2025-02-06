@@ -96,7 +96,7 @@ export async function getSheetsBySpreadsheetId(
 
 export type DataBySheetIdOptions = {
   offset?: number
-  perPage?: number
+  limit?: number
   columnCount?: number
 }
 
@@ -106,12 +106,12 @@ export type SheetColumn = {
 }
 
 export type SheetPagination = {
-  perPage: number
-  cellRange: string
+  limit: number
+  cell_range: string
   offset: number
-  nextOffset: number
-  totalItems: number
-  haveNext: boolean
+  next_offset: number
+  total: number
+  hasNext: boolean
 }
 
 export type GetDataBySheetNameResponse = {
@@ -123,15 +123,15 @@ export type GetDataBySheetNameResponse = {
 export async function getDataBySheetName(
   spreadsheetId: string,
   sheetName: string,
-  options: DataBySheetIdOptions = { offset: 2, perPage: 100, columnCount: 10 }
+  options: DataBySheetIdOptions = { offset: 2, limit: 100, columnCount: 10 }
 ): Promise<GetDataBySheetNameResponse | null> {
   try {
     const offset = options?.offset || 2
-    const perPage = options?.perPage || 100
+    const limit = options?.limit || 100
     const columnCount = options?.columnCount || 10
 
     const firstRow = offset
-    const lastRow = offset + perPage - 1
+    const lastRow = offset + limit - 1
 
     const maxColumn = columnCount ? numberToLetter(Number(columnCount)) : 'EE'
 
@@ -146,7 +146,7 @@ export async function getDataBySheetName(
 
     if (sheetRes && sheetRes.data && sheetRes.data.valueRanges) {
       const headerRow = sheetRes.data.valueRanges?.[0]?.values?.[0] || []
-      const totalItems = (sheetRes.data.valueRanges[1].values || []).length
+      const total = (sheetRes.data.valueRanges[1].values || []).length
       const rows = sheetRes.data.valueRanges[2].values || []
 
       const columns: SheetColumn[] = []
@@ -176,12 +176,12 @@ export async function getDataBySheetName(
       }
 
       const pagination: SheetPagination = {
-        perPage,
-        cellRange: paginatedRange,
+        limit,
+        cell_range: paginatedRange,
         offset,
-        nextOffset: offset + perPage,
-        totalItems,
-        haveNext: totalItems > offset + perPage,
+        next_offset: offset + limit,
+        total,
+        hasNext: total > offset + limit,
       }
 
       return { columns, pagination, data } as GetDataBySheetNameResponse

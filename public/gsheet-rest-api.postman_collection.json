@@ -325,7 +325,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&per_page=100&column_count=10",
+											"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&limit=100&column_count=10",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -341,7 +341,7 @@
 													"description": "Pagination offset"
 												},
 												{
-													"key": "per_page",
+													"key": "limit",
 													"value": "100",
 													"description": "Pagination page size"
 												},
@@ -378,7 +378,7 @@
 													}
 												],
 												"url": {
-													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&per_page=100&column_count=10",
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&limit=100&column_count=10",
 													"host": [
 														"{{baseUrl}}"
 													],
@@ -394,7 +394,7 @@
 															"description": "Pagination offset"
 														},
 														{
-															"key": "per_page",
+															"key": "limit",
 															"value": "100",
 															"description": "Pagination page size"
 														},
@@ -424,7 +424,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n  \"data\": [\n    {\n      \"_row\": \"<integer>\"\n    },\n    {\n      \"_row\": \"<integer>\"\n    }\n  ],\n  \"pagination\": {\n    \"perPage\": \"<integer>\",\n    \"cellRange\": \"<string>\",\n    \"offset\": \"<integer>\",\n    \"nextOffset\": \"<integer>\",\n    \"totalItems\": \"<integer>\",\n    \"haveNext\": \"<boolean>\"\n  },\n  \"columns\": [\n    {\n      \"title\": \"<string>\",\n      \"cell\": \"<string>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"cell\": \"<string>\"\n    }\n  ]\n}"
+											"body": "{\n  \"data\": [\n    {\n      \"_row\": \"<integer>\"\n    },\n    {\n      \"_row\": \"<integer>\"\n    }\n  ],\n  \"pagination\": {\n    \"limit\": \"<integer>\",\n    \"cell_range\": \"<string>\",\n    \"offset\": \"<integer>\",\n    \"next_offset\": \"<integer>\",\n    \"total\": \"<integer>\",\n    \"hasNext\": \"<boolean>\"\n  },\n  \"columns\": [\n    {\n      \"title\": \"<string>\",\n      \"cell\": \"<string>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"cell\": \"<string>\"\n    }\n  ]\n}"
 										},
 										{
 											"name": "Empty data",
@@ -437,7 +437,7 @@
 													}
 												],
 												"url": {
-													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&per_page=100&column_count=10",
+													"raw": "{{baseUrl}}/sheets/:spreadsheet_id/:sheet_name?offset=2&limit=100&column_count=10",
 													"host": [
 														"{{baseUrl}}"
 													],
@@ -453,7 +453,7 @@
 															"description": "Pagination offset"
 														},
 														{
-															"key": "per_page",
+															"key": "limit",
 															"value": "100",
 															"description": "Pagination page size"
 														},

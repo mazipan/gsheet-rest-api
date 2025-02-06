@@ -14,8 +14,9 @@ export default function Home() {
         <div className="absolute -top-[440px] -left-[200px] h-[388px] w-[1758px] rotate-[40deg] rounded-full bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 opacity-80 blur-[48px] delay-700 duration-1000 ease-in-out motion-safe:animate-pulse"></div>
         <div className="absolute -top-[280px] left-[960px] h-[492px] w-[1192px] rotate-[-32deg] rounded-full bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 opacity-75 blur-[48px] delay-500 duration-300 ease-in-out motion-safe:animate-pulse"></div>
 
-        <div className="absolute -bottom-[280px] -left-[1000px] h-[492px] w-[1192px] rotate-[-32deg] rounded-full bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 opacity-75 blur-[72px] delay-500 duration-300 ease-in-out motion-safe:animate-pulse"></div>
-        <div className="absolute -bottom-[440px] -left-[100px] h-[200px] w-[1758px] rotate-[40deg] rounded-full bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 opacity-80 blur-[100px] delay-700 duration-1000 ease-in-out motion-safe:animate-pulse"></div>
+        <div className="absolute -bottom-[50px] -left-[200px] h-[492px] w-[500px] rotate-[-32deg] rounded-full bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 opacity-75 blur-[50px] delay-500 duration-300 ease-in-out motion-safe:animate-pulse"></div>
+        <div className="absolute -bottom-[100px] left-[100px] h-[200px] w-[500px] rotate-[40deg] rounded-full bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 opacity-80 blur-[40px] delay-700 duration-1000 ease-in-out motion-safe:animate-pulse"></div>
+        <div className="absolute -bottom-[150px] left-[420px] h-[200px] w-[500px] rotate-[40deg] rounded-full bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 opacity-80 blur-[70px] delay-700 duration-1000 ease-in-out motion-safe:animate-pulse"></div>
       </div>
       <main className="row-start-2 flex flex-col items-center gap-16 sm:items-start">
         <div className="space-y-6 self-center text-center">
