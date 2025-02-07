@@ -32,8 +32,8 @@ export function numberToLetter(num: number) {
 
 export function detectValues(val: string) {
   if (val === '') return null
-  if (val === 'TRUE') return true
-  if (val === 'FALSE') return false
+  if (val.toUpperCase() === 'TRUE') return true
+  if (val.toUpperCase() === 'FALSE') return false
   if (/^\d+\.\d+$/.test(val)) return parseFloat(val)
   if (/^\d+$/.test(val)) return parseInt(val, 10)
 

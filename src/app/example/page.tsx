@@ -74,14 +74,14 @@ export default async function Example() {
         </h1>
 
         <p className="text-base text-gray-500 dark:text-gray-400">
-          This app was developed to demonstrated how to use{' '}
+          This app was developed to demonstrate how to use{' '}
           <Link className="text-blue-600 underline dark:text-blue-400" href="/">
             gsheet-rest-api
           </Link>{' '}
           to build your next hobby project.
           <br />
           <span>
-            Check the complete code for this example in{' '}
+            You can find the complete code for this example in{' '}
             <a
               href="https://github.com/mazipan/gsheet-rest-api/tree/master/src/app/example"
               target="_blank"

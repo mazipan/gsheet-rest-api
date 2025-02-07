@@ -23,6 +23,29 @@
         "summary": "List all files",
         "description": "List down all the spreadsheets can be accessed by the service account.",
         "operationId": "getAllFileList",
+         "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Pagination page size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "example": 10
+            }
+          },
+          {
+            "name": "next_token",
+            "in": "query",
+            "description": "Token to get next page",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -31,6 +54,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "next_token": {
+                      "type": "string"
+                    },
                     "data": {
                       "type": "array",
                       "items": {
@@ -52,6 +78,32 @@
                     "message": {
                       "type": "string",
                       "example": "Something bad happened!"
+                    },
+                    "next_token": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The API Key is invalid!"
+                    },
+                    "next_token": {
+                      "type": "string"
                     },
                     "data": {
                       "type": "array",
@@ -117,6 +169,26 @@
                     "message": {
                       "type": "string",
                       "example": "Something bad happened!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The API Key is invalid!"
                     },
                     "data": {
                       "type": "array",
@@ -246,6 +318,26 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The API Key is invalid!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -349,6 +441,26 @@
                     "message": {
                       "type": "string",
                       "example": "Something bad happened!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The API Key is invalid!"
                     },
                     "data": {
                       "type": "array",
@@ -468,6 +580,26 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The API Key is invalid!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -562,6 +694,25 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The API Key is invalid!"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -635,6 +786,27 @@
                     "message": {
                       "type": "string",
                       "example": "Something bad happened!"
+                    },
+                    "deleted_rows": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The API Key is invalid!"
                     },
                     "deleted_rows": {
                       "type": "integer",

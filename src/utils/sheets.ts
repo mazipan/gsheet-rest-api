@@ -393,6 +393,7 @@ export async function appendSheetRow(
 
       // Check if there's new columns
       let newColCount = 0
+
       const data: sheets_v4.Schema$ValueRange[] = []
       bodyData.forEach((body) => {
         Object.keys(body).forEach((k) => {
