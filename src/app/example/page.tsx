@@ -111,10 +111,14 @@ export default async function Example() {
             Total: {todosResponse?.pagination?.total}
           </span>
           <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-            Has Next? {todosResponse?.pagination?.hasNext?.toString()}
+            Next:{' '}
+            {todosResponse?.pagination?.hasNext?.toString()?.toUpperCase()}
           </span>
           <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
             Cell Range: {todosResponse?.pagination?.cell_range}
+          </span>
+          <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+            Limit: {todosResponse?.pagination?.limit}
           </span>
           <span className="rounded-sm bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
             Offset: {todosResponse?.pagination?.offset}

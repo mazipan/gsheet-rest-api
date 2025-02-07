@@ -192,13 +192,15 @@ export async function getDataBySheetName(
         if (validValuesCount) data.push(row)
       }
 
+      const hasNext = total > offset + limit
+
       const pagination: SheetPagination = {
         limit,
         cell_range: paginatedRange,
         offset,
-        next_offset: offset + limit,
+        next_offset: !hasNext ? offset : offset + limit,
         total,
-        hasNext: total > offset + limit,
+        hasNext,
       }
 
       return { columns, pagination, data } as GetDataBySheetNameResponse
